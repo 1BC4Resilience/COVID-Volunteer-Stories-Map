@@ -99,9 +99,9 @@
       mapboxgl.accessToken = 'pk.eyJ1IjoiaWFub2QiLCJhIjoiY2s5MzBnMWVzMDBoazNsczFwNDU3MDhzdCJ9.m-pcCq-j4Y0y717DBXF_Qw';
       var map = new mapboxgl.Map({
         container: 'map', // container id
-        style: "mapbox://styles/mapbox/light-v10", //YOUR TURN: choose a style: https://docs.mapbox.com/api/maps/#styles
-        center: [-122.411464, 37.7852299], // starting position [lng, lat]
-        zoom: 9, // starting zoom
+        style: "mapbox://styles/ianod/ck9a7c8lu11431ipbyvxb1pph", //YOUR TURN: choose a style: https://docs.mapbox.com/api/maps/#styles
+        center: [-9.63512, 27.48007], // starting position [lng, lat]
+        zoom: 1.2, // starting zoom
         transformRequest: transformRequest
       });
 
@@ -114,34 +114,40 @@
       function init() {
         Tabletop.init({
           // YOUR TURN: change 'key' value to point to your spreadsheet
-          key: 'https://docs.google.com/spreadsheets/d/1LplOP5FsMIcqvZ3d0w8yM108IgJxB0UQiV3fv38sKjc/edit?usp=sharing',
+          key: 'https://docs.google.com/spreadsheets/d/1MiaRJC9UUK1O3TOgz8LaftvwAK9Ch1uMoELu2oDEOV0/edit?usp=sharing',
           // once Tabletop has loaded the data, it passes it to the 'callback' function, 'addPoints', defined below
           callback: addPoints,
           simpleSheet: true
         });
       }
 
-
       // create a function called addPoints that iterates through your table (row by row) to create markers and popups
       function addPoints(data) {
 
         // iterate through your table to set the marker to lat/long values for each row
 
+
+ 
         data.forEach(function(row) {
+
+        if (row.Longitude !== '') {
+
+//window.alert(row.Title);
 
           // create a variable for your popup and populate your popup with information from your table
           var popup = new mapboxgl.Popup()
-            .setHTML(`<h3>` + row.Name + `</h3>` + '<h4>' + '<b>' + 'Address: ' + '</b>' + row.Address + '</h4>' + '<h4>' + '<b>' + 'Phone: ' + '</b>' + row.Phone + '</h4>'); // use the table to populate your popup with text
+            .setHTML(`<h3>` + row.Title + `</h3>` + '<h4>' + '<b>' + 'NS: ' + '</b>' + row.NationalSociety + '</h4>' + '<h4>' + '<b>' + 'Name: ' + '</b>' + row.Submitter + '</h4>'); // use the table to populate your popup with text
 
 
           // create a variable for your markup and add it to the map 
           var marker = new mapboxgl.Marker({
               color: 'purple'
             })
+
             .setLngLat([row.Longitude, row.Latitude])
             .setPopup(popup)
-            .addTo(map); // add the marker to the map
-
+            .addTo(map) // add the marker to the map
+            }
 
         });
       }
