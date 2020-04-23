@@ -1,0 +1,46 @@
+input { display: none; }
+input + label { display: inline-block }
+
+input ~ .tab { display: none }
+#tab1:checked ~ .tab.content1,
+#tab2:checked ~ .tab.content2,
+#tab3:checked ~ .tab.content3,
+#tab4:checked ~ .tab.content4,
+#tab5:checked ~ .tab.content5 { display: block; }
+
+input + label {
+  border: 1px solid #999;
+  background: #EEE;
+  padding: 4px 12px;
+  border-radius: 4px 4px 0 0;
+  position: relative;
+  top: 1px;
+}
+input:checked + label {
+  background: #FFF;
+  border-bottom: 1px solid transparent;
+}
+input ~ .tab {
+  border-top: 1px solid #999;
+  padding: 12px;
+}
+
+iframe-container {
+  overflow: hidden;
+  padding-top: 56.25%;
+  position: relative;
+}
+ 
+.iframe-container iframe {
+   border: 0;
+   height: 100%;
+   left: 0;
+   position: relative;
+   top: 0;
+   width: 100%;
+}
+ 
+/* 4x3 Aspect Ratio */
+.iframe-container-4x3 {
+  padding-top: 75%;
+}
