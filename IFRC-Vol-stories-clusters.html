@@ -5,9 +5,10 @@
     <title></title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.js'></script>
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.css' rel='stylesheet' />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css" rel="stylesheet" />
     <script src='./csv2geojson.js'></script>
+    <script src="https://unpkg.com/supercluster@6.0.2/dist/supercluster.min.js"></script>
 </head>
 
 
@@ -119,6 +120,56 @@ function makeGeoJSON(csvData) {
                 }
 
             });
+
+
+            map.addLayer({
+                id: 'unclustered-point',
+                type: 'circle',
+                source: 'Stories',
+                filter: ['!', ['has', 'point_count']],
+                paint: {
+                    'circle-color': 'rgba(0,0,0,.6)',
+                    'circle-radius': 8,
+                    'circle-stroke-width': 5,
+                    'circle-stroke-color': '#8dd3c7'
+                }
+            });
+
+            map.addLayer({
+                id: 'unclustered-count',
+                type: 'circle',
+                source: 'Stories',
+                filter: ['!', ['has', 'point_count']],
+                layout: {
+                    'text-field': '1',
+                    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                    'text-size': 12
+                },
+                'paint': {
+                    'text-color': '#ffffff'
+                }
+            });
+
+
+map.on('click', function(e) {
+  var cluster = map.queryRenderedFeatures(e.point, { layers: ["clusters"] });
+
+  if (cluster.length) {
+    // load values to determine cluster points & children
+
+    var superc = supercluster({
+       radius: 40,
+       maxZoom: 16
+    })
+
+    superc.load(map.getSource('Stories').serialize().data.features);
+
+    var children = superc.getChildren(0, map.getZoom());
+    console.log(children); // returns array of children from clustered point;
+  }
+});
+
+
 
 
         });    
