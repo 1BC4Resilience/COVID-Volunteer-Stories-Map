@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title></title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.css' rel='stylesheet' />
+    <script src='./csv2geojson.js'></script>
+</head>
+
+
+<style>
+    body {
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+
+
+    #map {
+      border-left: 1px solid #fff;
+      position: absolute;
+      width: 100%;
+      height: 80%;
+      top: 0;
+      bottom: 0;
+      z-index: -1;
+    }
+
+    #results {
+      position: absolute;
+      height: 20%;
+      z-index: 1;
+    }
+</style>
+
+<body>
+
+<div id='map'></div>
+<div id="results">Results will go here.</div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiaWFub2QiLCJhIjoiY2s5MzBnMWVzMDBoazNsczFwNDU3MDhzdCJ9.m-pcCq-j4Y0y717DBXF_Qw';
+var map = new mapboxgl.Map({
+    container: 'map', // container id
+    style: 'mapbox://styles/ianod/ck9a7c8lu11431ipbyvxb1pph', //stylesheet location
+    center: [7.84999, 17.69575], // starting position
+    zoom: 1.05 // starting zoom
+});
+
+
+const all = ['==', ['get', 'PrimaryCategory'], 'All'];
+const current_category = "All";
+
+$(document).ready(function() {
+    $.ajax({
+        type: "GET",
+        url: 'https://cors-anywhere.herokuapp.com/https://spreadsheets.google.com/a/the-pirate-way.com/tq?tqx=out:csv&tq&gid=1&key=1MiaRJC9UUK1O3TOgz8LaftvwAK9Ch1uMoELu2oDEOV0',
+        dataType: "text",
+        success: function(csvData) {makeGeoJSON(csvData);}
+        //success: function(csvData) {window.alert(csvData);}
+     });
+});
+
+function makeGeoJSON(csvData) {
+    csv2geojson.csv2geojson(csvData, {
+        latfield: 'Latitude',
+        lonfield: 'Longitude',
+        delimiter: ','
+    }, function(err, data) {
+        map.on('load', function () {
+
+            document.getElementById('results').style.top = (document.getElementById('map').offsetHeight) + "px";
+
+            map.addSource('Stories', {
+                'type': 'geojson',
+                'data': data,
+                'cluster': true,
+                'clusterRadius': 80
+            });
+
+            map.addLayer({
+                'id': 'clusters',
+                'type': 'circle',
+                'source': 'Stories',
+                filter: ['has', 'point_count'],
+                'layout': {
+                    //"icon-image": "marker-15"
+                },
+                'paint': {
+                    'circle-color': 'rgba(0,0,0,.6)',
+                    'circle-radius': {
+                         property: "point_count",
+                         stops: [
+                             [0,   10],
+                             [10,  16],
+                             [50,  20],
+                             [100, 30]
+                              ]
+                     },
+                    'circle-stroke-color': '#8dd3c7',
+                    'circle-stroke-width': 5
+                }
+            });
+
+            map.addLayer({
+                id: 'cluster-count',
+                type: 'symbol',
+                source: 'Stories',
+                filter: ['has', 'point_count'],
+                layout: {
+                    'text-field': '{point_count}',
+                    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                    'text-size': 12
+                },
+                'paint': {
+                    'text-color': '#ffffff'
+                }
+
+            });
+
+
+        });    
+    });
+}
+</script>
+
+</body>
+</html>
