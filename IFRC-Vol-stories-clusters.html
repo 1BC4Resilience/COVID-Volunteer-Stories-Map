@@ -135,9 +135,10 @@ function makeGeoJSON(csvData) {
                 }
             });
 
+
             map.addLayer({
                 id: 'unclustered-count',
-                type: 'circle',
+                type: 'symbol',
                 source: 'Stories',
                 filter: ['!', ['has', 'point_count']],
                 layout: {
@@ -151,13 +152,14 @@ function makeGeoJSON(csvData) {
             });
 
 
+/*
 map.on('click', function(e) {
   var cluster = map.queryRenderedFeatures(e.point, { layers: ["clusters"] });
 
   if (cluster.length) {
     // load values to determine cluster points & children
 
-    var superc = supercluster({
+    var superc = new supercluster({
        radius: 40,
        maxZoom: 16
     })
@@ -170,7 +172,17 @@ map.on('click', function(e) {
 });
 
 
+// inspect a cluster on click
+map.on('click', 'clusters', function(e) {
+var features = map.queryRenderedFeatures(e.point, {
+layers: ['clusters']
+});
+var clusterId = features[0].properties.cluster_id;
+map.getSource('Stories').getChildren(0, map.getZoom());
+console.log(children); // returns array of children from clustered point;
+});
 
+*/
 
         });    
     });
