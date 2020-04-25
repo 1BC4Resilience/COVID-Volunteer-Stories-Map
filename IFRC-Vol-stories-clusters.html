@@ -101,7 +101,7 @@ function makeGeoJSON(csvData) {
                 'source': 'Stories',
                 filter: ['has', 'point_count'],
                 'layout': {
-                    //"icon-image": "marker-15"
+                    //
                 },
                 'paint': {
                     'circle-color': 'rgba(0,0,0,.6)',
@@ -179,6 +179,18 @@ function makeGeoJSON(csvData) {
                 clusterSource.getClusterLeaves(clusterId, point_count, 0, function(err, aFeatures){
 			buildResults(aFeatures);
                 })
+
+            map.getSource('Stories').getClusterExpansionZoom(
+                clusterId,
+                function(err, zoom) {
+			if (err) return;
+ 
+			map.easeTo({
+				center: features[0].geometry.coordinates,
+				zoom: zoom
+			});
+                }
+            );
 
             });
 
