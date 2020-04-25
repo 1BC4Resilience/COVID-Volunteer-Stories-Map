@@ -24,8 +24,9 @@
     #map {
       border-left: 1px solid #fff;
       position: absolute;
-      width: 100%;
-      height: 80%;
+      //margin: auto;
+      width: 85%;
+      height: 60%;
       top: 0;
       bottom: 0;
       z-index: -1;
@@ -33,32 +34,44 @@
 
     #results {
       position: absolute;
-      height: 20%;
+      height: 40%;
       z-index: 1;
     }
+
+    #intro {
+      margin-top: 0.8em;
+      padding: 0.3em;
+      background-color: #FFF343;
+      font-style: italic;
+    }
+
 </style>
 
 <body>
 
 <div id='map'></div>
-<div id="results"></div>
+<div id="results">
+<div id="intro">Click on the circles above to see a list of stories for that area. Or zoom in to see the stories from specific locations.</div>
+</div>
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoiaWFub2QiLCJhIjoiY2s5MzBnMWVzMDBoazNsczFwNDU3MDhzdCJ9.m-pcCq-j4Y0y717DBXF_Qw';
+
 var map = new mapboxgl.Map({
     container: 'map', // container id
     style: 'mapbox://styles/ianod/ck9a7c8lu11431ipbyvxb1pph', //stylesheet location
     center: [7.84999, 17.69575], // starting position
-    zoom: 1.05 // starting zoom
+    zoom: 0.85 // starting zoom
 });
 
+// Add zoom and rotation controls to the map.
+map.addControl(new mapboxgl.NavigationControl());
 
-const all = ['==', ['get', 'PrimaryCategory'], 'All'];
-const current_category = "All";
+            document.getElementById('results').style.top = (document.getElementById('map').offsetHeight) + "px";
 
 $(document).ready(function() {
     $.ajax({
         type: "GET",
-        url: 'https://cors-anywhere.herokuapp.com/https://spreadsheets.google.com/a/the-pirate-way.com/tq?tqx=out:csv&tq&gid=1&key=1MiaRJC9UUK1O3TOgz8LaftvwAK9Ch1uMoELu2oDEOV0',
+        url: 'https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/e/2PACX-1vRZrfy0aAVCUxbI37nwAI10oVZcxdm06XpU2i-Mcnc_NjDRouUO2cR5VsAUnNmE6lWabDVcovuHkJy7/pub?gid=393242394&single=true&output=csv',
         dataType: "text",
         success: function(csvData) {makeGeoJSON(csvData);}
         //success: function(csvData) {window.alert(csvData);}
@@ -73,7 +86,7 @@ function makeGeoJSON(csvData) {
     }, function(err, data) {
         map.on('load', function () {
 
-            document.getElementById('results').style.top = (document.getElementById('map').offsetHeight) + "px";
+
 
             map.addSource('Stories', {
                 'type': 'geojson',
@@ -164,9 +177,7 @@ function makeGeoJSON(csvData) {
 
                 // Get all points under a cluster
                 clusterSource.getClusterLeaves(clusterId, point_count, 0, function(err, aFeatures){
-
 			buildResults(aFeatures);
-
                 })
 
             });
@@ -176,17 +187,15 @@ function makeGeoJSON(csvData) {
             map.on('click',/* cluster layer id */ 'unclustered-point', function (e) {
 
                 var features = map.queryRenderedFeatures(e.point, { layers: ['unclustered-point'] });
-
-			buildResults(features);
-
+                buildResults(features);
             });
-
-
 
 
         });    
     });
 }
+
+
 
 
 function buildResults(features) {
