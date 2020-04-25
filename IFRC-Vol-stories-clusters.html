@@ -7,6 +7,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js"></script>
     <link href="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css" rel="stylesheet" />
+    <link href="./clusters.css" rel="stylesheet" />
     <script src='./csv2geojson.js'></script>
     <script src="https://unpkg.com/supercluster@6.0.2/dist/supercluster.min.js"></script>
 </head>
@@ -40,7 +41,7 @@
 <body>
 
 <div id='map'></div>
-<div id="results">Results will go here.</div>
+<div id="results"></div>
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoiaWFub2QiLCJhIjoiY2s5MzBnMWVzMDBoazNsczFwNDU3MDhzdCJ9.m-pcCq-j4Y0y717DBXF_Qw';
 var map = new mapboxgl.Map({
@@ -152,41 +153,68 @@ function makeGeoJSON(csvData) {
             });
 
 
-/*
-map.on('click', function(e) {
-  var cluster = map.queryRenderedFeatures(e.point, { layers: ["clusters"] });
+            // from https://stackoverflow.com/questions/38651290/mapbox-get-list-of-points-by-click-on-cluster
 
-  if (cluster.length) {
-    // load values to determine cluster points & children
+            map.on('click',/* cluster layer id */ 'clusters', function (e) {
 
-    var superc = new supercluster({
-       radius: 40,
-       maxZoom: 16
-    })
+                var features = map.queryRenderedFeatures(e.point, { layers: ['clusters'] });
+                var clusterId = features[0].properties.cluster_id,
+                point_count = features[0].properties.point_count,
+                clusterSource = map.getSource(/* cluster layer data source id */'Stories');
 
-    superc.load(map.getSource('Stories').serialize().data.features);
+                // Get all points under a cluster
+                clusterSource.getClusterLeaves(clusterId, point_count, 0, function(err, aFeatures){
 
-    var children = superc.getChildren(0, map.getZoom());
-    console.log(children); // returns array of children from clustered point;
-  }
-});
+			buildResults(aFeatures);
+
+                })
+
+            });
 
 
-// inspect a cluster on click
-map.on('click', 'clusters', function(e) {
-var features = map.queryRenderedFeatures(e.point, {
-layers: ['clusters']
-});
-var clusterId = features[0].properties.cluster_id;
-map.getSource('Stories').getChildren(0, map.getZoom());
-console.log(children); // returns array of children from clustered point;
-});
+            // click on unclustered point
+            map.on('click',/* cluster layer id */ 'unclustered-point', function (e) {
 
-*/
+                var features = map.queryRenderedFeatures(e.point, { layers: ['unclustered-point'] });
+
+			buildResults(features);
+
+            });
+
+
+
 
         });    
     });
 }
+
+
+function buildResults(features) {
+	var arrayLength = features.length;
+	var html_string = '<h3>Results</h3>';
+	for (var i = 0; i < arrayLength; i++) {
+		html_string += '<button type="button" class="collapsible"><b>'+ features[i].properties.Title + '</b>, ' + features[i].properties.NationalSociety + '</button>';
+		html_string += '<div class="collapsed_content"><p><i>' + features[i].properties.Submitter + '</i> &mdash; ' + features[i].properties.Story + '</p></div>'
+	}
+	document.getElementById('results').innerHTML = html_string;
+
+	var coll = document.getElementsByClassName("collapsible");
+	var i;
+
+	for (i = 0; i < coll.length; i++) {
+		coll[i].addEventListener("click", function() {
+			this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.display === "block") {
+                              content.style.display = "none";
+                        } else {
+                              content.style.display = "block";
+                        }
+		});
+	}
+}
+
+
 </script>
 
 </body>
