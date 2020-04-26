@@ -32,17 +32,24 @@
       z-index: -1;
     }
 
+    #filter_section {
+      float: right;
+      width: 15%;
+      z-index: 2;
+    }
+
     #results {
       position: absolute;
       height: 40%;
       z-index: 1;
     }
 
-    #intro {
+    .intro {
       margin-top: 0.8em;
       padding: 0.3em;
       background-color: #FFF343;
       font-style: italic;
+      width: 85%;
     }
 
 </style>
@@ -50,8 +57,16 @@
 <body>
 
 <div id='map'></div>
+
+<!--
+<div id='filter_section'>
+<button type="button" onclick="runFilter()">Filter test</button>
+<div class="intro">The filter section is not working yet. This button is just for testing purposes. If you try the button and need to reload the map, just reload the webpage.</div>
+</div>
+-->
+
 <div id="results">
-<div id="intro">Click on the circles above to see a list of stories for that area. Or zoom in to see the stories from specific locations.</div>
+<div class="intro">Click on the circles above to see a list of stories for that area. Or zoom in to see the stories from specific locations.</div>
 </div>
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoiaWFub2QiLCJhIjoiY2s5MzBnMWVzMDBoazNsczFwNDU3MDhzdCJ9.m-pcCq-j4Y0y717DBXF_Qw';
@@ -66,7 +81,31 @@ var map = new mapboxgl.Map({
 // Add zoom and rotation controls to the map.
 map.addControl(new mapboxgl.NavigationControl());
 
-            document.getElementById('results').style.top = (document.getElementById('map').offsetHeight) + "px";
+document.getElementById('results').style.top = (document.getElementById('map').offsetHeight) + "px";
+
+var data_geoJSON; 
+
+// filters for classifying stories
+// (Not currently used, but could be used for future features.)
+var catHealth = ['==', ['get', 'Categories'], 'Health'];
+var catFundraising = ['==', ['get', 'Categories'], 'Fundraising'];
+var catBlood = ['==', ['get', 'Categories'], 'Blood'];
+var catTraining = ['==', ['get', 'Categories'], 'Training'];
+var catPSS = ['==', ['get', 'Categories'], 'PSS'];
+var sentIndivHeroism = ['==', ['get', 'Sentiment'], 'Individual - Everyday heroism and volunteers sacrifices'];
+var sentIndivFragility = ['==', ['get', 'Sentiment'], 'Individual - Volunteers fragility, needs and vulnerabilities'];
+var sentIndivCoping = ['==', ['get', 'Sentiment'], 'Individual - Volunteering as coping mechanism'];
+var sentCommOpportunity = ['==', ['get', 'Sentiment'], 'Community - Crisis as opportunity'];
+var sentCommRisks = ['==', ['get', 'Sentiment'], 'Community - Existing and increased risks'];
+var sentIntlBelonging = ['==', ['get', 'Sentiment'], 'International - Reinforced belonging and common purpose'];
+var sentIntlResponsibility = ['==', ['get', 'Sentiment'], 'International - Increased responsability'];
+
+
+var baseClusterFilter = ['has', 'point_count']; 
+var baseIndividualFilter = ['!', ['has', 'point_count']];
+var clusterFilter =  baseClusterFilter;  
+var individualFilter = baseIndividualFilter;
+
 
 $(document).ready(function() {
     $.ajax({
@@ -78,32 +117,63 @@ $(document).ready(function() {
      });
 });
 
+// Read the data from the spreadsheet is as a GeoJSON
 function makeGeoJSON(csvData) {
     csv2geojson.csv2geojson(csvData, {
         latfield: 'Latitude',
         lonfield: 'Longitude',
         delimiter: ','
     }, function(err, data) {
-        map.on('load', function () {
+
+        data_geoJSON = data;
+
+    });
+}
 
 
+map.on('load', function () {
 
+	buildLayers(data_geoJSON, clusterFilter, individualFilter); 
+});
+
+
+function buildLayers(data, clusterFilter, individualFilter) {
+
+	if (map.getSource("Stories")) {
+
+		console.log('Source was still available.');
+		var Stories = map.getSource("Stories");
+
+	} else {
             map.addSource('Stories', {
                 'type': 'geojson',
                 'data': data,
                 'cluster': true,
-                'clusterRadius': 80
+                'clusterRadius': 40,
+                'clusterProperties': { // keep separate counts for each fuel category in a cluster
+                    'health': ['+', ['case', catHealth, 1, 0]],
+                    'fundraising': ['+', ['case', catFundraising, 1, 0]],
+                    'blood': ['+', ['case', catBlood, 1, 0]],
+                    'training': ['+', ['case', catTraining, 1, 0]],
+                    'PSS': ['+', ['case', catPSS, 1, 0]],
+                    'heroism': ['+', ['case', sentIndivHeroism, 1, 0]],
+                    'fragility': ['+', ['case', sentIndivFragility, 1, 0]],
+                    'coping': ['+', ['case', sentIndivCoping, 1, 0]],
+                    'opportunity': ['+', ['case', sentCommOpportunity, 1, 0]],
+                    'risks': ['+', ['case', sentCommRisks, 1, 0]],
+                    'belonging': ['+', ['case', sentIntlBelonging, 1, 0]],
+                    'responsibility': ['+', ['case', sentIntlResponsibility, 1, 0]]
+                }
             });
+	}
+
 
             map.addLayer({
-                'id': 'clusters',
-                'type': 'circle',
-                'source': 'Stories',
-                filter: ['has', 'point_count'],
-                'layout': {
-                    //
-                },
-                'paint': {
+                id: 'clusters',
+                type: 'circle',
+                source: 'Stories',
+                filter: clusterFilter,
+                paint: {
                     'circle-color': 'rgba(0,0,0,.6)',
                     'circle-radius': {
                          property: "point_count",
@@ -119,17 +189,20 @@ function makeGeoJSON(csvData) {
                 }
             });
 
+            //map.setLayerZoomRange('clusters', 0, 20);
+
+
             map.addLayer({
                 id: 'cluster-count',
                 type: 'symbol',
                 source: 'Stories',
-                filter: ['has', 'point_count'],
+                filter: clusterFilter,
                 layout: {
                     'text-field': '{point_count}',
                     'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
                     'text-size': 12
                 },
-                'paint': {
+                paint: {
                     'text-color': '#ffffff'
                 }
 
@@ -140,7 +213,7 @@ function makeGeoJSON(csvData) {
                 id: 'unclustered-point',
                 type: 'circle',
                 source: 'Stories',
-                filter: ['!', ['has', 'point_count']],
+                filter: individualFilter,
                 paint: {
                     'circle-color': 'rgba(0,0,0,.6)',
                     'circle-radius': 8,
@@ -154,13 +227,13 @@ function makeGeoJSON(csvData) {
                 id: 'unclustered-count',
                 type: 'symbol',
                 source: 'Stories',
-                filter: ['!', ['has', 'point_count']],
+                filter: individualFilter,
                 layout: {
                     'text-field': '1',
                     'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
                     'text-size': 12
                 },
-                'paint': {
+                paint: {
                     'text-color': '#ffffff'
                 }
             });
@@ -201,13 +274,69 @@ function makeGeoJSON(csvData) {
                 var features = map.queryRenderedFeatures(e.point, { layers: ['unclustered-point'] });
                 buildResults(features);
             });
-
-
-        });    
-    });
+ 
 }
 
 
+// Not currently used
+function checkFilter() {
+
+}
+
+// Not currently used.
+// Was an attempt to combine filtering with clusters, which doesn't seem to be supported.
+function runFilter() {
+
+	var newClusterFilter = [];
+	var newIndividualFilter = [];
+
+	var filterNumber = 1;
+
+	for (var i = 0, len = filterNumber; i < len; ++i) {
+		  
+	}
+
+	newClusterFilter[0] = "all";
+
+		newClusterFilter[1] = [];
+		newClusterFilter[1] = baseClusterFilter;
+
+		newClusterFilter[2] = [];
+		newClusterFilter[2] = catHealth;
+
+
+	newIndividualFilter[0] = "all";
+
+		newIndividualFilter[1] = [];
+		newIndividualFilter[1] = baseIndividualFilter;
+
+		newIndividualFilter[2] = [];
+		newIndividualFilter[2] = catHealth;
+
+
+        if (map.getLayer("clusters")) {
+            map.removeLayer("clusters");
+        }
+
+        if (map.getLayer("cluster-count")) {
+            map.removeLayer("cluster-count");
+        }
+
+        if (map.getLayer("unclustered-point")) {
+            map.removeLayer("unclustered-point");
+        }
+
+
+        if (map.getLayer("unclustered-count")) {
+            map.removeLayer("unclustered-count");
+        }
+
+        if (map.getSource("Stories")) {
+            map.removeSource("Stories");
+        }
+
+	buildLayers(data_geoJSON, newClusterFilter, newIndividualFilter)
+}
 
 
 function buildResults(features) {
