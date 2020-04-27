@@ -258,12 +258,14 @@ function buildLayers(data, clusterFilter, individualFilter) {
 			clusterId,
 	                function(err, zoom) {
 				if (err) return;
- 
+
+				if (zoom > 5) {
+					zoom = 5;
+				}
 				map.easeTo({
 					center: features[0].geometry.coordinates,
 					zoom: zoom
 				});
-//console.log('clusterclick zoom level: ', map.getZoom());
 
                 }
             );
