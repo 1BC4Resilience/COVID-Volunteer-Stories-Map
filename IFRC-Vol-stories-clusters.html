@@ -75,7 +75,8 @@ var map = new mapboxgl.Map({
     container: 'map', // container id
     style: 'mapbox://styles/ianod/ck9a7c8lu11431ipbyvxb1pph', //stylesheet location
     center: [7.84999, 17.69575], // starting position
-    zoom: 0.85 // starting zoom
+    zoom: 0.85, // starting zoom
+    maxZoom: 5
 });
 
 // Add zoom and rotation controls to the map.
@@ -253,15 +254,17 @@ function buildLayers(data, clusterFilter, individualFilter) {
 			buildResults(aFeatures);
                 })
 
-            map.getSource('Stories').getClusterExpansionZoom(
-                clusterId,
-                function(err, zoom) {
-			if (err) return;
+		map.getSource('Stories').getClusterExpansionZoom(
+			clusterId,
+	                function(err, zoom) {
+				if (err) return;
  
-			map.easeTo({
-				center: features[0].geometry.coordinates,
-				zoom: zoom
-			});
+				map.easeTo({
+					center: features[0].geometry.coordinates,
+					zoom: zoom
+				});
+//console.log('clusterclick zoom level: ', map.getZoom());
+
                 }
             );
 
@@ -273,6 +276,11 @@ function buildLayers(data, clusterFilter, individualFilter) {
 
                 var features = map.queryRenderedFeatures(e.point, { layers: ['unclustered-point'] });
                 buildResults(features);
+		map.easeTo({
+			center: features[0].geometry.coordinates,
+			zoom: 4.2
+		});
+
             });
  
 }
