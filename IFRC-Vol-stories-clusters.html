@@ -25,7 +25,7 @@
       border-left: 1px solid #fff;
       position: absolute;
       //margin: auto;
-      width: 85%;
+      width: 80%;
       height: 60%;
       top: 0;
       bottom: 0;
@@ -33,9 +33,14 @@
     }
 
     #filter_section {
+      background-color: #FFB67A;
       float: right;
-      width: 15%;
+      width: 20%;
       z-index: 2;
+    }
+
+    #filter_content {
+      margin-left: 0.4em;
     }
 
     #results {
@@ -49,7 +54,17 @@
       padding: 0.3em;
       background-color: #FFF343;
       font-style: italic;
-      width: 85%;
+      width: 80%;
+    }
+
+    .filter-label {
+      margin-block-start: 6px !important;
+      margin-block-end: 4px !important;
+    }
+
+    #filterSubmitButton {
+      float: right;
+      margin-right: 1em;
     }
 
 </style>
@@ -58,12 +73,33 @@
 
 <div id='map'></div>
 
+<!--   -->
+<div id="filter_section">
+<div id="filter_content">
+<form action="javascript:;" onsubmit="runFilter()">
+  <div id="checklist">
+  <h3>Filter options</h3>
+  <p class="filter-label">Category</p>
+  <input type="checkbox" id="checkHealth" class="catCheck" name="catSelect" value="Health" onclick="runFilter()">Health<br>
+  <input type="checkbox" id="checkWASH" class="catCheck" name="catSelect" value="WASH" onclick="runFilter()">WASH<br>
+  <input type="checkbox" id="checkPSS" class="catCheck" name="catSelect" value="Psycho-social" onclick="runFilter()">Psycho-social<br>
+  <p class="filter-label">Sentiment</p>
+  <input type="checkbox" id="checkIndivHeroism" class="sentCheck" name="catSelect" value="Individual - Everyday heroism and volunteers sacrifices" onclick="runFilter()">Individual - Heroism<br>
+  <input type="checkbox" id="checkIndivVulnerability" class="sentCheck" name="catSelect" value="Individual - Volunteers fragility, needs and vulnerabilities" onclick="runFilter()">Individual - Vulnerability<br>
+  <input type="checkbox" id="checkIndivCoping" class="sentCheck" name="catSelect" value="Individual - Volunteering as coping mechanism" onclick="runFilter()">Individual - Coping<br>
+  <input type="checkbox" id="checkCommOpportunity" class="sentCheck" name="catSelect" value="Community - Crisis as opportunity" onclick="runFilter()">Community - Opportunity<br>
+  <input type="checkbox" id="checkCommRisks" class="sentCheck" name="catSelect" value="Community - Existing and increased risks" onclick="runFilter()">Community - Risks<br>
+  <input type="checkbox" id="checkIntlBelonging" class="sentCheck" name="catSelect" value="International - Reinforced belonging and common purpose" onclick="runFilter()">Global - Belonging<br>
+  <input type="checkbox" id="checkIntlResponsibility" class="sentCheck" name="catSelect" value="International - Increased responsability" onclick="runFilter()">Global - Responsibility<br>
+  </div>
 <!--
-<div id='filter_section'>
-<button type="button" onclick="runFilter()">Filter test</button>
-<div class="intro">The filter section is not working yet. This button is just for testing purposes. If you try the button and need to reload the map, just reload the webpage.</div>
-</div>
+  <hr>
+  <input type="submit" id="filterSubmitButton" value="Filter">
 -->
+</form>
+</div>
+</div>
+
 
 <div id="results">
 <div class="intro">Click on the circles above to see a list of stories for that area. Or zoom in to see the stories from specific locations.</div>
@@ -84,7 +120,8 @@ map.addControl(new mapboxgl.NavigationControl());
 
 document.getElementById('results').style.top = (document.getElementById('map').offsetHeight) + "px";
 
-var data_geoJSON; 
+var data_geoJSON;
+var full_geoJSON; 
 
 // filters for classifying stories
 // (Not currently used, but could be used for future features.)
@@ -114,8 +151,9 @@ $(document).ready(function() {
         url: 'https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/e/2PACX-1vRZrfy0aAVCUxbI37nwAI10oVZcxdm06XpU2i-Mcnc_NjDRouUO2cR5VsAUnNmE6lWabDVcovuHkJy7/pub?gid=393242394&single=true&output=csv',
         dataType: "text",
         success: function(csvData) {makeGeoJSON(csvData);}
-        //success: function(csvData) {window.alert(csvData);}
+
      });
+     attachCheckboxHandlers();
 });
 
 // Read the data from the spreadsheet is as a GeoJSON
@@ -127,6 +165,7 @@ function makeGeoJSON(csvData) {
     }, function(err, data) {
 
         data_geoJSON = data;
+        full_geoJSON = JSON.parse(JSON.stringify(data));
 
     });
 }
@@ -288,66 +327,93 @@ function buildLayers(data, clusterFilter, individualFilter) {
 }
 
 
-// Not currently used
-function checkFilter() {
-
-}
-
-// Not currently used.
-// Was an attempt to combine filtering with clusters, which doesn't seem to be supported.
+// Limited version with filtering on single categories or sentiments.
 function runFilter() {
 
-	var newClusterFilter = [];
-	var newIndividualFilter = [];
+	data_geoJSON = JSON.parse(JSON.stringify(full_geoJSON));
+	map.getSource('Stories').setData(data_geoJSON);
 
-	var filterNumber = 1;
+	var catItems=document.getElementsByClassName("catCheck");
 
-	for (var i = 0, len = filterNumber; i < len; ++i) {
-		  
+	var selectedCatItems="";
+	for(var i=0; i<catItems.length; i++){
+		if(catItems[i].type=='checkbox' && catItems[i].checked==true) {
+			selectedCatItems+=catItems[i].value;
+		}
+		
+	}
+	if (selectedCatItems) {
+		data_geoJSON.features = data_geoJSON.features.filter(feature => feature.properties.Categories.includes(selectedCatItems));
 	}
 
-	newClusterFilter[0] = "all";
+	var sentItems=document.getElementsByClassName("sentCheck");
 
-		newClusterFilter[1] = [];
-		newClusterFilter[1] = baseClusterFilter;
+	var selectedSentItems="";
+	for(var i=0; i<sentItems.length; i++){
+		if(sentItems[i].type=='checkbox' && sentItems[i].checked==true) {
+			selectedSentItems+=sentItems[i].value;
+		}
+		
+	}
+	if (selectedSentItems) {
+		data_geoJSON.features = data_geoJSON.features.filter(feature => feature.properties.Sentiment.includes(selectedSentItems));
+	}
 
-		newClusterFilter[2] = [];
-		newClusterFilter[2] = catHealth;
+	//data_geoJSON.features = data_geoJSON.features.filter(feature => feature.properties.Categories.includes('Health') || feature.properties.Categories.includes('Homeless'));
 
+	map.getSource('Stories').setData(data_geoJSON);
 
-	newIndividualFilter[0] = "all";
-
-		newIndividualFilter[1] = [];
-		newIndividualFilter[1] = baseIndividualFilter;
-
-		newIndividualFilter[2] = [];
-		newIndividualFilter[2] = catHealth;
-
-
-        if (map.getLayer("clusters")) {
-            map.removeLayer("clusters");
-        }
-
-        if (map.getLayer("cluster-count")) {
-            map.removeLayer("cluster-count");
-        }
-
-        if (map.getLayer("unclustered-point")) {
-            map.removeLayer("unclustered-point");
-        }
-
-
-        if (map.getLayer("unclustered-count")) {
-            map.removeLayer("unclustered-count");
-        }
-
-        if (map.getSource("Stories")) {
-            map.removeSource("Stories");
-        }
-
-	buildLayers(data_geoJSON, newClusterFilter, newIndividualFilter)
 }
 
+$("input:checkbox").click(function() {
+    if ($(this).is(":checked")) {
+        var group = "input:checkbox[name='" + $(this).attr("name") + "']";
+        $(group).prop("checked", false);
+        $(this).click();
+        $(this).prop("checked", true);
+	document.getElementById('results').innerHTML = '<div class="intro">Click on the circles above to see a list of stories for that area. Or zoom in to see the stories from specific locations.</div>';
+    } else {
+	document.getElementById('results').innerHTML = '<div class="intro">Click on the circles above to see a list of stories for that area. Or zoom in to see the stories from specific locations.</div>';
+        //$(this).prop("checked", false);
+    }
+});
+
+
+function groomChecklist(selectedItem)
+{
+    // get reference to element containing filter category checkboxes
+    var el = document.getElementById('checklist');
+
+    // get reference to input elements in filter category container element
+    var setOfCheckboxes = el.getElementsByTagName('input');
+
+
+    if ($('input.catCheck').not(':checked').length == 0) {
+        for (i = 0; i < setOfCheckboxes .length; i++) {
+	    setOfCheckboxes[i].checked = false ;
+        }
+    }
+
+    selectedItem.checked = true;
+
+}
+
+
+function attachCheckboxHandlers() {
+    // get reference to element containing filter category checkboxes
+    var el = document.getElementById('checklist');
+
+    // get reference to input elements in filter category container element
+    var setOfCheckboxes = el.getElementsByTagName('input');
+    
+    // assign updateTotal function to onclick property of each checkbox
+    for (var i=0, len=setOfCheckboxes.length; i<len; i++) {
+        if ( setOfCheckboxes[i].type === 'checkbox' ) {
+            //setOfCheckboxes[i].onclick = groomChecklist(this);
+            //setOfCheckboxes[i].checked = true;
+        }
+    }
+}
 
 function buildResults(features) {
 	var arrayLength = features.length;
