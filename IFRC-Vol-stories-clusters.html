@@ -291,12 +291,13 @@ map.on('load', function () {
 	buildLayers(data_geoJSON, clusterFilter, individualFilter); 
 });
 
-
+/*
 map.on('error', e => {
     // Hide those annoying non-error errors
     if (e && e.error !== 'Error: Not Found')
         location.reload();
 });
+*/
 
 function buildLayers(data, clusterFilter, individualFilter) {
 
