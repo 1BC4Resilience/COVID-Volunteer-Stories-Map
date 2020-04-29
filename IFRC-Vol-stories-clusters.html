@@ -10,7 +10,7 @@
     <link href="./clusters.css" rel="stylesheet" />
     <script src='./csv2geojson.js'></script>
     <script src="https://unpkg.com/supercluster@6.0.2/dist/supercluster.min.js"></script>
-    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 </head>
 
@@ -22,7 +22,6 @@
       padding: 0;
     }
 
-
     #map {
       border-left: 1px solid #fff;
       position: absolute;
@@ -31,7 +30,7 @@
       height: 60%;
       top: 0;
       bottom: 0;
-      z-index: -1;
+      z-index: 5;
     }
 
     #filter_section {
@@ -97,6 +96,48 @@
       float: right;
 }
 
+/* Translation settings */
+
+#google_translate_element:before {
+    font-family: 'Material Icons';
+    content: "\E927";
+    margin-left: 20px;
+    font-size: 1.4rem;
+    color: white;
+    display: block;
+    float: right;
+    right-margin: 3px;
+}
+
+body {
+    top: 0px !important;
+}
+
+.goog-logo-link {
+    display:none !important;
+} 
+
+.goog-te-gadget{
+    color: transparent !important;
+}
+
+.goog-tooltip {
+    display: none !important;
+}
+
+.goog-tooltip:hover {
+    display: none !important;
+}
+
+.goog-text-highlight {
+    background-color: transparent !important;
+    border: none !important; 
+    box-shadow: none !important;
+}
+
+.goog-te-banner-frame.skiptranslate {
+    display: none !important;
+} 
 
 
 @media screen and (max-width: 500px) {
@@ -133,6 +174,17 @@
 
 <!--   -->
 <div id="filter_section">
+<div>
+    <div id="google_translate_element" style="text-align: right;"></div>
+    
+      <script type="text/javascript">
+      function googleTranslateElementInit() {
+          new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.VERTICAL}, 'google_translate_element');
+      }
+      </script>
+
+      <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</div>
 <div id="filter_content">
 <form action="javascript:;" onsubmit="runFilter()">
   <div id="checklist">
