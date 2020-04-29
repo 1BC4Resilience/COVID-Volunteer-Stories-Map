@@ -31,7 +31,7 @@
       border-left: 1px solid #fff;
       position: absolute;
       //margin: auto;
-      width: 80%;
+      width: 78%;
       height: 50%;
       top: 0;
       bottom: 0;
@@ -41,7 +41,7 @@
     #filter_section {
       background-color: #FFB67A;
       float: right;
-      width: 20%;
+      width: 22%;
       z-index: 2;
     }
 
@@ -236,8 +236,6 @@ var map = new mapboxgl.Map({
 
 // Add zoom and rotation controls to the map.
 map.addControl(new mapboxgl.NavigationControl());
-
-document.getElementById('results').style.top = (document.getElementById('map').offsetHeight) + "px";
 
 var data_geoJSON;
 var full_geoJSON; 
@@ -451,6 +449,7 @@ function buildLayers(data, clusterFilter, individualFilter) {
 
             });
  
+            document.getElementById('results').style.top = (document.getElementById('map').offsetHeight) + "px";
 }
 
 
@@ -594,6 +593,7 @@ function toggleLangPopup() {
   }
 }
 */
+
 
 
 
