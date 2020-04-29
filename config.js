@@ -120,7 +120,7 @@ var config = {
         {
             id: '0079',
             title: 'Prepare face shield by my self (PPE)',
-            image: './Images/QatarRC-PPE-image-cropped.jpg',
+            image: 'https://raw.githubusercontent.com/1BC4Resilience/COVID-Volunteer-Stories-Map/master/images/QatarRC-PPE-image-cropped.jpg',
             description: 'Because of the ongoing COVID-19 crisis all over the world is facing a lack of PPE, especially face masks and face shields. I had little idea and thought some why we can\'t make face shield? I went shopping for some items and made face shields. Just checked. Really. It is very good. It protects my full face. Now I am using this for face contact and aerosol procedures with my nursing staff. That\'s the way I helped my staff and facility.<p><i>Lasantha Sanjeewa Tennakoon, Qatar Red Crescent</i></p>',
             location: {
                 center: [49.61390, 25.83497],
