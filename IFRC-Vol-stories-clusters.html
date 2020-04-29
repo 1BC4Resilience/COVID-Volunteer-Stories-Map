@@ -10,6 +10,8 @@
     <link href="./clusters.css" rel="stylesheet" />
     <script src='./csv2geojson.js'></script>
     <script src="https://unpkg.com/supercluster@6.0.2/dist/supercluster.min.js"></script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 </head>
 
 
@@ -74,6 +76,29 @@
       width: 80%;
     }
 
+    .translation_note_box {
+      display: block;
+      //float: right;
+    }
+
+    #translation_popup {
+      display: none;
+      background-color: white;
+      position: fixed;
+      top: 70%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50%;
+      z-index: 5;
+}
+
+    .translation_popup_close {
+      display: block;
+      float: right;
+}
+
+
+
 @media screen and (max-width: 500px) {
     #map {
       width: 90%;
@@ -103,6 +128,7 @@
 
 <body>
 
+
 <div id='map'></div>
 
 <!--   -->
@@ -112,8 +138,8 @@
   <div id="checklist">
   <h3>Filter options</h3>
   <p class="filter-label">Category</p>
+  <input type="checkbox" id="checkOutreach" class="catCheck" name="catSelect" value="Outreach" onclick="runFilter()">Outreach<br>
   <input type="checkbox" id="checkHealth" class="catCheck" name="catSelect" value="Health" onclick="runFilter()">Health<br>
-  <input type="checkbox" id="checkWASH" class="catCheck" name="catSelect" value="WASH" onclick="runFilter()">WASH<br>
   <input type="checkbox" id="checkPSS" class="catCheck" name="catSelect" value="Psycho-social" onclick="runFilter()">Psycho-social<br>
   <p class="filter-label">Sentiment</p>
   <input type="checkbox" id="checkIndivHeroism" class="sentCheck" name="catSelect" value="Individual - Everyday heroism and volunteers sacrifices" onclick="runFilter()">Individual - Heroism<br>
@@ -137,6 +163,9 @@
 <div class="intro">Click on the circles above to see a list of stories for that area. Or zoom in to see the stories from specific locations.</div>
 <div id="filter_note">For filtering options, turn your device sideways to landscape view.</div>
 </div>
+
+<div id="translation_popup"></div>
+
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoiaWFub2QiLCJhIjoiY2s5MzBnMWVzMDBoazNsczFwNDU3MDhzdCJ9.m-pcCq-j4Y0y717DBXF_Qw';
 
@@ -451,11 +480,28 @@ function attachCheckboxHandlers() {
 function buildResults(features) {
 	var arrayLength = features.length;
 	var html_string = '<h3>Results</h3>';
+	var Translation_note = '';
+	var translation_string = '';
 	for (var i = 0; i < arrayLength; i++) {
-		html_string += '<button type="button" class="collapsible"><b>'+ features[i].properties.Title + '</b>, ' + features[i].properties.NationalSociety + '</button>';
-		html_string += '<div class="collapsed_content"><p><i>' + features[i].properties.Submitter + '</i> &mdash; ' + features[i].properties.Story + '</p></div>'
+		if (features[i].properties.Summary !=='') {
+			var Story_text = features[i].properties.Summary;
+		} else {
+			var Story_text = features[i].properties.StoryEnglish;
+		}
+		if (features[i].properties.Language !=='English') {
+			Translation_note = '<div class="translation_note_box"><p>(Translated from ' + features[i].properties.Language + '. See the <a href="' + features[i].properties.Link + '" target="_blank">original post in ' + features[i].properties.Language + '</a>.)</p></div>';
+			//Translation_note = '<div class="translation_note_box"><p>(Translated from: ' + features[i].properties.Language + '. See <a href="javascript:toggleLangPopup()">full translation</a>.' + ' See the <a href="' + features[i].properties.Link + '" target="_blank">original post in ' + features[i].properties.Language + '</a>.)</p></div>';
+			//translation_string = '<div class="translation_popup_close"><a href="javascript:toggleLangPopup()">Close</a></div>' + Story_text;
+		} else {
+			Translation_note = '';
+			//Translation_string = '';
+		}
+		html_string += '<button type="button" class="collapsible"><b>'+ features[i].properties.TitleEnglish + '</b>, ' + features[i].properties.NationalSociety + '</button>';
+		html_string += '<div class="collapsed_content">' + Translation_note + '<p><i>' + features[i].properties.Submitter + '</i> &mdash; ' + Story_text + '</p></div>';
+		//document.getElementById('translation_popup').innerHTML = translation_string;
 	}
 	document.getElementById('results').innerHTML = html_string;
+
 
 	var coll = document.getElementsByClassName("collapsible");
 	var i;
@@ -464,14 +510,26 @@ function buildResults(features) {
 		coll[i].addEventListener("click", function() {
 			this.classList.toggle("active");
                         var content = this.nextElementSibling;
-                        if (content.style.display === "block") {
-                              content.style.display = "none";
-                        } else {
+                        if (content.style.display === "none") {
                               content.style.display = "block";
+                        } else {
+                              content.style.display = "none";
                         }
 		});
 	}
 }
+
+/*
+function toggleLangPopup() {
+  var x = document.getElementById("translation_popup");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+*/
+
 
 
 </script>
