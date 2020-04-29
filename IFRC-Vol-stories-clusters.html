@@ -549,7 +549,7 @@ function buildResults(features) {
 			//Translation_string = '';
 		}
 		html_string += '<button type="button" class="collapsible"><b>'+ features[i].properties.TitleEnglish + '</b>, ' + features[i].properties.NationalSociety + '</button>';
-		html_string += '<div class="collapsed_content">' + Translation_note + '<p><i>' + features[i].properties.Submitter + '</i> &mdash; ' + Story_text + '</p></div>';
+		html_string += '<div class="collapsed_content" style="display: none;">' + Translation_note + '<p><i>' + features[i].properties.Submitter + '</i> &mdash; ' + Story_text + '</p></div>';
 		//document.getElementById('translation_popup').innerHTML = translation_string;
 	}
 	document.getElementById('results').innerHTML = html_string;
