@@ -295,14 +295,14 @@ map.on('load', function () {
 
 });
 
-/*
+
 map.on('error', e => {
     // Reload on data load error.
-    if (e.substr(0,19) || e.errorsubstr(0,19) === 'Input data given to')
+    if (e.toString().substr(0,19) || e.error.toString().substr(0,19) === 'Input data given to')
         console.log('Error loading data. Retrying ...');
-        //location.reload();
+        location.reload();
 });
-*/
+
 
 function buildLayers(data, clusterFilter, individualFilter) {
 
