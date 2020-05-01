@@ -1,25 +1,741 @@
+<!DOCTYPE html>
 <html>
-<link href="./tabs.css" rel="stylesheet">
-<link rel="icon"  type="image/jpg" href="https://p7.hiclipart.com/preview/31/480/955/computer-icons-web-browser-red-lines.jpg">
+<head>
+    <meta charset='utf-8' />
+    <title></title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css" rel="stylesheet" />
+    <link href="./clusters.css" rel="stylesheet" />
+    <script src='./csv2geojson.js'></script>
+    <script src="https://unpkg.com/supercluster@6.0.2/dist/supercluster.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
 
-<body>
+
+<style>
+    body {
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    #map_block {
+      position: relative;
+      height: 100%;
+      width: 100%;
+    }
+
+    #title {
+      position: absolute;
+      top: 4px;
+      left: 36px;
+      z-index: 5;
+      color: white;
+      font-family: acumin-pro-wide, sans-serif;
+      font-style: normal;
+      font-weight: 700;
+      font-size: 40px;
+    }
+
+    .intro {
+      position: absolute;
+      top: 10px;
+      z-index: 5;
+      color: white;
+      font-family: acumin-pro, sans-serif;
+      font-style: normal;
+      font-weight: 100;
+      font-size: 15px;
+      width: 35%;
+      margin: 0 30%;
+    }
+
+    #left_space {
+      background-color: #0b0028;
+      width: 20%;
+      height: 100%;
+      z-index: 2;
+      display: block;
+      float: left;
+    }
+
+    #map_container {
+      height: 100%;
+      width: 62%;
+      display: block;
+      float: left;
+    }
+
+    #map {
+      position: relative;;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+    }
+
+    .mapboxgl-ctrl-group {
+      background-color: transparent;
+    }
+
+    .mapboxgl-ctrl-zoom-in .mapboxgl-ctrl-icon {
+      background-image: url(data:image/svg+xml;charset=utf8,<svg%20viewBox%3D%270%200%2020%2020%27%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27>%0A%20%20<path%20style%3D%27fill%3A%23ffffff%3B%27%20d%3D%27M%2010%206%20C%209.446%206%209%206.4459904%209%207%20L%209%209%20L%207%209%20C%206.446%209%206%209.446%206%2010%20C%206%2010.554%206.446%2011%207%2011%20L%209%2011%20L%209%2013%20C%209%2013.55401%209.446%2014%2010%2014%20C%2010.554%2014%2011%2013.55401%2011%2013%20L%2011%2011%20L%2013%2011%20C%2013.554%2011%2014%2010.554%2014%2010%20C%2014%209.446%2013.554%209%2013%209%20L%2011%209%20L%2011%207%20C%2011%206.4459904%2010.554%206%2010%206%20z%27%20%2F>%0A<%2Fsvg>%0A) !important;
+    }
+
+    .mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
+        background-image: url(data:image/svg+xml;charset=utf8,<svg%20viewBox%3D%270%200%2020%2020%27%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27>%0A%20%20<path%20style%3D%27fill%3A%23ffffff%3B%27%20d%3D%27m%207%2C9%20c%20-0.554%2C0%20-1%2C0.446%20-1%2C1%200%2C0.554%200.446%2C1%201%2C1%20l%206%2C0%20c%200.554%2C0%201%2C-0.446%201%2C-1%200%2C-0.554%20-0.446%2C-1%20-1%2C-1%20z%27%20%2F>%0A<%2Fsvg>%0A) !important;
+    }
+
+    .mapboxgl-ctrl-zoom-out {
+        border-top: none !important;
+    }
+
+    .mapboxgl-ctrl-compass {
+      display: none !important;
+    }
+
+    .mapboxgl-ctrl-attrib {
+      color: #ef3340 !important;
+      background-color: transparent !important;
+    }
+
+    .mapboxgl-ctrl-attrib-inner a {
+      color: #ffffff !important;
+    }
+
+    a.mapbox-improve-map {
+      color: #ef3340 !important;
+    }
+
+    .mapboxgl-ctrl-logo {
+      
+    }
+
+    .mapboxgl-ctrl-bottom-left {
+      left: 27%;
+    }
+
+    #filter_section {
+      background-color: #fcf5e4;
+      display: block;
+      float: left;
+      width: 18%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    #filter_content {
+      margin-left: 0.6em;
+      margin-top: 40px;
+    }
+
+    #checklist h3 {
+      color: #5508d3;
+      font-family: acumin-pro, sans-serif;
+      font-style: normal;
+      font-weight: 200;
+    }
+
+    #checklist p {
+      color: #5508d3;
+      font-family: acumin-pro, sans-serif;
+      font-style: normal;
+      font-weight: 700;
+    }
+
+    .checkbox {
+      color: #5508d3;
+      appearance: none;
+    }
+
+    label {
+      color: #5508d3;
+      font-size: 15px;
+      font-family: acumin-pro, sans-serif;
+      font-style: normal;
+      font-weight: 100;
+    }
+
+    INPUT[type=checkbox]:focus {
+      outline: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+    INPUT[type=checkbox] {
+      background-color: #DDD;
+      border-radius: 2px;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+      position: relative;
+      top: 5px;
+    }
+
+    INPUT[type=checkbox]:checked {
+      background-color: #5508d3; 
+      background: #5508d3  url("data:image/gif;base64,R0lGODlhCwAKAIABAP////3cnSH5BAEKAAEALAAAAAALAAoAAAIUjH+AC73WHIsw0UCjglraO20PNhYAOw==") 3px 3px no-repeat;
+    }
+
+    #results {
+      position: absolute;
+      top: 65px;
+      width: 33vw;
+      height: calc(100% - 72px);
+      margin-left: 3vw;
+      z-index: 10;
+      overflow-y: auto;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    }
+
+    #results::-webkit-scrollbar { /* WebKit */
+      width: 0;
+      height: 0;
+    }
+
+    .story_item {
+      margin-bottom: 40px;
+      padding: 18px;
+      background-color: #fcf5e4;
+      opacity: 0.9;
+    }
+
+    .story_item p {
+      //margin-bottom: 0px;
+      margin-block-start: 8px;
+      margin-inline-start: 0; 
+      margin-block-end: 0;
+      margin-inline-end: 0;
+    }
+
+    #Stories_title {
+      display: block;
+      margin-bottom: 16px:
+      color: #0b0028;
+      font-size: 32px;
+      font-family: acumin-pro, sans-serif;
+      font-style: normal;
+      font-weight: 700;
+    }
+
+    #Stories_subtitle {
+      display: block;
+      margin-bottom: 12px:
+      color: #0b0028;
+      font-size: 18px;
+      font-family: acumin-pro, sans-serif;
+      font-style: normal;
+      font-weight: 100;
+    }
+    #Stories_scroll_note {
+      display: block;
+      margin-block-end: 0px;
+      color: #0b0028;
+      font-size: 14px;
+      font-family: acumin-pro, sans-serif;
+      font-style: normal;
+      font-weight: 100;
+    }
+
+    .filter-label {
+      margin-block-start: 6px !important;
+      margin-block-end: 4px !important;
+    }
+
+    #filterSubmitButton {
+      float: right;
+      margin-right: 1em;
+    }
+
+    #filter_note {
+      margin-top: 1em;
+      background-color: #FFB67A;
+      display: none;
+      width: 80%;
+    }
+
+    .translation_note_box {
+      margin-top: 4px;
+      display: block;
+      //float: right;
+    }
+
+    .link_to_original {
+      font-style: italic;
+      margin-block-end: 6px !important;
+    }
+
+    #translation_popup {
+      display: none;
+      background-color: white;
+      position: fixed;
+      top: 70%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50%;
+      z-index: 5;
+}
+
+    .translation_popup_close {
+      display: block;
+      float: right;
+}
+
+/* Translation settings */
+
+#google_translate_element:before {
+    font-family: 'Material Icons';
+    content: "\E927";
+    margin-left: 20px;
+    font-size: 1.4rem;
+    color: #5508d3;
+    display: block;
+    float: right;
+    right-margin: 6px;
+}
+
+body {
+    top: 0px !important;
+}
+
+.goog-logo-link {
+    display:none !important;
+} 
+
+.goog-te-gadget{
+    color: transparent !important;
+}
+
+.goog-te-combo{
+    color: #5508d3 !important;
+    background-color: #fcf5e4 !important;
+    border-style: none;
+}
+
+.goog-tooltip {
+    display: none !important;
+}
+
+.goog-tooltip:hover {
+    display: none !important;
+}
+
+.goog-text-highlight {
+    background-color: transparent !important;
+    border: none !important; 
+    box-shadow: none !important;
+}
+
+.goog-te-banner-frame.skiptranslate {
+    display: none !important;
+} 
 
 
-<input type="radio" name="tabs" id="tab1" checked />
-<label for="tab1">Clusters (and future filtering)</label>
+@media screen and (max-width: 500px) {
+    #map {
+      width: 90%;
+      height: 40%;
+    }
 
-<input type="radio" name="tabs" id="tab2" />
-<label for="tab2">Interactive tour</label>
+    #filter_section {
+      width: 10%;
+      display:none;
+    }
 
-<div class="tab content1 iframe-container">
-	<iframe height="97% !important" width="100%" src="./IFRC-Vol-stories-clusters.html"></iframe>
+    .collapsible {
+      font-size: 16px;
+    }
+
+    .collapsed_content p {
+      font-size: 16px;
+    }
+
+    #filter_note {
+      display: block;
+    }
+
+}
+
+</style>
+
+<body class="InternalPage">
+
+<div id="map_block">
+<div id="title">Clusters</div>
+<div class="intro">Click on the circles above to see a list of stories for that area. Or zoom in to see the stories from specific locations.</div>
+<div id="left_space"> </div>
+<div id="map_container">
+<div id='map'></div>
 </div>
 
-<div class="tab content2 iframe-container">
-	<iframe height="97% !important" width="100%" src="./IFRC-Vol-stories-tour.html"></iframe>
+<!--   -->
+<div id="filter_section">
+<div>
+    <div id="google_translate_element" style="text-align: right;"></div>
+    
+      <script type="text/javascript">
+      function googleTranslateElementInit() {
+          new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.VERTICAL}, 'google_translate_element');
+      }
+      </script>
+
+      <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</div>
+<div id="filter_content">
+<form action="javascript:;" onsubmit="runFilter()">
+  <div id="checklist">
+  <h3>Filter options</h3>
+  <p class="filter-label">Category</p>
+  <label for="checkbox"><input type="checkbox" id="checkOutreach" class="catCheck" name="catSelect" value="Outreach" onclick="runFilter()">Outreach</label><br>
+  <label for="checkbox"><input type="checkbox" id="checkHealth" class="catCheck" name="catSelect" value="Health" onclick="runFilter()">Health</label><br>
+  <label for="checkbox"><input type="checkbox" id="checkPSS" class="catCheck" name="catSelect" value="Psycho-social" onclick="runFilter()">Psycho-social</label><br>
+  <p class="filter-label">Sentiment</p>
+  <label for="checkbox"><input type="checkbox" id="checkIndivHeroism" class="sentCheck" name="catSelect" value="Individual - Everyday heroism and volunteers sacrifices" onclick="runFilter()">Individual - Heroism</label><br>
+  <label for="checkbox"><input type="checkbox" id="checkIndivVulnerability" class="sentCheck" name="catSelect" value="Individual - Volunteers fragility, needs and vulnerabilities" onclick="runFilter()">Individual - Vulnerability</label><br>
+  <label for="checkbox"><input type="checkbox" id="checkIndivCoping" class="sentCheck" name="catSelect" value="Individual - Volunteering as coping mechanism" onclick="runFilter()">Individual - Coping</label><br>
+  <label for="checkbox"><input type="checkbox" id="checkCommOpportunity" class="sentCheck" name="catSelect" value="Community - Crisis as opportunity" onclick="runFilter()">Community - Opportunity</label><br>
+  <label for="checkbox"><input type="checkbox" id="checkCommRisks" class="sentCheck" name="catSelect" value="Community - Existing and increased risks" onclick="runFilter()">Community - Risks</label><br>
+  <label for="checkbox"><input type="checkbox" id="checkIntlBelonging" class="sentCheck" name="catSelect" value="International - Reinforced belonging and common purpose" onclick="runFilter()">Global - Belonging</label><br>
+  <label for="checkbox"><input type="checkbox" id="checkIntlResponsibility" class="sentCheck" name="catSelect" value="International - Increased responsibility" onclick="runFilter()">Global - Responsibility</label><br>
+  </div>
+<!--
+  <hr>
+  <input type="submit" id="filterSubmitButton" value="Filter">
+-->
+</form>
+</div>
+</div>
 </div>
 
-</div>
+<div id="results"></div>
+
+<div id="translation_popup"></div>
+
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiaWFub2QiLCJhIjoiY2s5MzBnMWVzMDBoazNsczFwNDU3MDhzdCJ9.m-pcCq-j4Y0y717DBXF_Qw';
+
+var map = new mapboxgl.Map({
+    container: 'map', // container id
+    style: 'mapbox://styles/ianod/ck9a7c8lu11431ipbyvxb1pph', //stylesheet location
+    center: [7.84999, 17.69575], // starting position
+    zoom: 0.75, // starting zoom -- was 85
+    maxZoom: 5
+});
+
+// disable map rotation using right click + drag
+map.dragRotate.disable();
+ 
+// disable map rotation using touch rotation gesture
+map.touchZoomRotate.disableRotation();
+
+// Add zoom and rotation controls to the map.
+map.addControl(new mapboxgl.NavigationControl());
+
+var data_geoJSON;
+var full_geoJSON; 
+
+// filters for classifying stories
+// (Not currently used, but could be used for future features.)
+var catHealth = ['==', ['get', 'Categories'], 'Health'];
+var catFundraising = ['==', ['get', 'Categories'], 'Fundraising'];
+var catBlood = ['==', ['get', 'Categories'], 'Blood'];
+var catTraining = ['==', ['get', 'Categories'], 'Training'];
+var catPSS = ['==', ['get', 'Categories'], 'PSS'];
+var sentIndivHeroism = ['==', ['get', 'Sentiment'], 'Individual - Everyday heroism and volunteers sacrifices'];
+var sentIndivFragility = ['==', ['get', 'Sentiment'], 'Individual - Volunteers fragility, needs and vulnerabilities'];
+var sentIndivCoping = ['==', ['get', 'Sentiment'], 'Individual - Volunteering as coping mechanism'];
+var sentCommOpportunity = ['==', ['get', 'Sentiment'], 'Community - Crisis as opportunity'];
+var sentCommRisks = ['==', ['get', 'Sentiment'], 'Community - Existing and increased risks'];
+var sentIntlBelonging = ['==', ['get', 'Sentiment'], 'International - Reinforced belonging and common purpose'];
+var sentIntlResponsibility = ['==', ['get', 'Sentiment'], 'International - Increased responsability'];
+
+
+var baseClusterFilter = ['has', 'point_count']; 
+var baseIndividualFilter = ['!', ['has', 'point_count']];
+var clusterFilter =  baseClusterFilter;  
+var individualFilter = baseIndividualFilter;
+
+
+$(document).ready(function() {
+    $.ajax({
+        type: "GET",
+        url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZrfy0aAVCUxbI37nwAI10oVZcxdm06XpU2i-Mcnc_NjDRouUO2cR5VsAUnNmE6lWabDVcovuHkJy7/pub?gid=393242394&single=true&output=csv',
+        dataType: "text",
+        success: function(csvData) {makeGeoJSON(csvData);}
+     });
+});
+
+// Read the data from the spreadsheet is as a GeoJSON
+function makeGeoJSON(csvData) {
+    csv2geojson.csv2geojson(csvData, {
+        latfield: 'Latitude',
+        lonfield: 'Longitude',
+        delimiter: ','
+    }, function(err, data) {
+
+        data_geoJSON = data;
+        full_geoJSON = JSON.parse(JSON.stringify(data));
+
+    });
+
+     // to correct sizing issue on load
+     window.dispatchEvent(new Event('resize'));
+
+     buildLayers(data_geoJSON, clusterFilter, individualFilter);
+}
+
+
+map.on('load', function () {
+
+});
+
+
+function buildLayers(data, clusterFilter, individualFilter) {
+
+	if (map.getSource("Stories")) {
+
+		console.log('Source was still available.');
+		var Stories = map.getSource("Stories");
+
+	} else {
+            map.addSource('Stories', {
+                'type': 'geojson',
+                'data': data,
+                'cluster': true,
+                'clusterRadius': 40,
+                'clusterProperties': { // keep separate counts for each fuel category in a cluster
+                    'health': ['+', ['case', catHealth, 1, 0]],
+                    'fundraising': ['+', ['case', catFundraising, 1, 0]],
+                    'blood': ['+', ['case', catBlood, 1, 0]],
+                    'training': ['+', ['case', catTraining, 1, 0]],
+                    'PSS': ['+', ['case', catPSS, 1, 0]],
+                    'heroism': ['+', ['case', sentIndivHeroism, 1, 0]],
+                    'fragility': ['+', ['case', sentIndivFragility, 1, 0]],
+                    'coping': ['+', ['case', sentIndivCoping, 1, 0]],
+                    'opportunity': ['+', ['case', sentCommOpportunity, 1, 0]],
+                    'risks': ['+', ['case', sentCommRisks, 1, 0]],
+                    'belonging': ['+', ['case', sentIntlBelonging, 1, 0]],
+                    'responsibility': ['+', ['case', sentIntlResponsibility, 1, 0]]
+                }
+            });
+	}
+
+
+            map.addLayer({
+                id: 'clusters',
+                type: 'circle',
+                source: 'Stories',
+                filter: clusterFilter,
+                paint: {
+                    'circle-color': 'rgba(11,0,40,.6)',
+                    'circle-radius': {
+                         property: "point_count",
+                         stops: [
+                             [0,   10],
+                             [10,  16],
+                             [50,  20],
+                             [100, 30]
+                              ]
+                     },
+                    'circle-stroke-color': '#ef3340',
+                    'circle-stroke-width': 2
+                }
+            });
+
+            //map.setLayerZoomRange('clusters', 0, 20);
+
+
+            map.addLayer({
+                id: 'cluster-count',
+                type: 'symbol',
+                source: 'Stories',
+                filter: clusterFilter,
+                layout: {
+                    'text-field': '{point_count}',
+                    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                    'text-size': 12
+                },
+                paint: {
+                    'text-color': '#ffffff'
+                }
+
+            });
+
+
+            map.addLayer({
+                id: 'unclustered-point',
+                type: 'circle',
+                source: 'Stories',
+                filter: individualFilter,
+                paint: {
+                    'circle-color': 'rgba(11,0,40,.6)',
+                    'circle-radius': 8,
+                    'circle-stroke-width': 2,
+                    'circle-stroke-color': '#ef3340'
+                }
+            });
+
+
+            map.addLayer({
+                id: 'unclustered-count',
+                type: 'symbol',
+                source: 'Stories',
+                filter: individualFilter,
+                layout: {
+                    'text-field': '1',
+                    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                    'text-size': 12
+                },
+                paint: {
+                    'text-color': '#ffffff'
+                }
+            });
+
+
+            // from https://stackoverflow.com/questions/38651290/mapbox-get-list-of-points-by-click-on-cluster
+
+            map.on('click',/* cluster layer id */ 'clusters', function (e) {
+
+                var features = map.queryRenderedFeatures(e.point, { layers: ['clusters'] });
+                var clusterId = features[0].properties.cluster_id,
+                point_count = features[0].properties.point_count,
+                clusterSource = map.getSource(/* cluster layer data source id */'Stories');
+
+                // Get all points under a cluster
+                clusterSource.getClusterLeaves(clusterId, point_count, 0, function(err, aFeatures){
+			buildResults(aFeatures);
+                })
+
+		map.getSource('Stories').getClusterExpansionZoom(
+			clusterId,
+	                function(err, zoom) {
+				if (err) return;
+
+				if (zoom > 5) {
+					zoom = 5;
+				}
+				map.easeTo({
+					center: features[0].geometry.coordinates,
+					zoom: zoom
+				});
+
+                }
+            );
+
+            });
+
+
+            // click on unclustered point
+            map.on('click',/* cluster layer id */ 'unclustered-point', function (e) {
+
+                var features = map.queryRenderedFeatures(e.point, { layers: ['unclustered-point'] });
+                buildResults(features);
+		map.easeTo({
+			center: features[0].geometry.coordinates,
+			zoom: 4.2
+		});
+
+            });
+}
+
+
+// Limited version with filtering on single categories or sentiments.
+function runFilter() {
+
+	data_geoJSON = JSON.parse(JSON.stringify(full_geoJSON));
+	map.getSource('Stories').setData(data_geoJSON);
+
+	var catItems=document.getElementsByClassName("catCheck");
+
+	var selectedCatItems="";
+	for(var i=0; i<catItems.length; i++){
+		if(catItems[i].type=='checkbox' && catItems[i].checked==true) {
+			selectedCatItems+=catItems[i].value;
+		}
+		
+	}
+	if (selectedCatItems) {
+		data_geoJSON.features = data_geoJSON.features.filter(feature => feature.properties.Categories.includes(selectedCatItems));
+	}
+
+	var sentItems=document.getElementsByClassName("sentCheck");
+
+	var selectedSentItems="";
+	for(var i=0; i<sentItems.length; i++){
+		if(sentItems[i].type=='checkbox' && sentItems[i].checked==true) {
+			selectedSentItems+=sentItems[i].value;
+		}
+		
+	}
+	if (selectedSentItems) {
+		data_geoJSON.features = data_geoJSON.features.filter(feature => feature.properties.Sentiment.includes(selectedSentItems));
+	}
+
+	//data_geoJSON.features = data_geoJSON.features.filter(feature => feature.properties.Categories.includes('Health') || feature.properties.Categories.includes('Homeless'));
+
+	map.getSource('Stories').setData(data_geoJSON);
+
+}
+
+$("input:checkbox").click(function() {
+    if ($(this).is(":checked")) {
+        var group = "input:checkbox[name='" + $(this).attr("name") + "']";
+        $(group).prop("checked", false);
+        $(this).click();
+        $(this).prop("checked", true);
+	document.getElementById('results').innerHTML = '';
+    } else {
+	document.getElementById('results').innerHTML = '';
+        //$(this).prop("checked", false);
+    }
+});
+
+
+function buildResults(features) {
+	var arrayLength = features.length;
+	var html_string = '<div class="story_item" style="display: block;"><p id="Stories_title">COVID volunteer stories</p><p id="Stories_subtitle">Inspiring stories from Red Cross and Red Crescent volunteers responding to COVID-19</p><p id="Stories_scroll_note">Scroll down</p></div>';
+	var Translation_note = '';
+	var translation_string = '';
+	for (var i = 0; i < arrayLength; i++) {
+		if (features[i].properties.Summary !=='') {
+			var Story_text = features[i].properties.Summary;
+		} else {
+			var Story_text = features[i].properties.StoryEnglish;
+		}
+		if (features[i].properties.Language !=='English') {
+			Translation_note = '<div class="translation_note_box"><p class="link_to_original">(Translated from ' + features[i].properties.Language + '. See the <a href="' + features[i].properties.Link + '" target="_blank">original post in ' + features[i].properties.Language + '</a>.)</p></div>';
+			//Translation_note = '<div class="translation_note_box"><p>(Translated from: ' + features[i].properties.Language + '. See <a href="javascript:toggleLangPopup()">full translation</a>.' + ' See the <a href="' + features[i].properties.Link + '" target="_blank">original post in ' + features[i].properties.Language + '</a>.)</p></div>';
+			//translation_string = '<div class="translation_popup_close"><a href="javascript:toggleLangPopup()">Close</a></div>' + Story_text;
+		} else {
+			Translation_note = '<div class="translation_note_box"><p class="link_to_original" style="text-align: right;">(See the <a href="' + features[i].properties.Link + '" target="_blank">original post</a>.)</p></div>';
+			//Translation_string = '';
+		}
+		html_string += '<div class="story_item" style="display: block;"><b>'+ features[i].properties.TitleEnglish + '</b>, ' + features[i].properties.NationalSociety + '<br>' + '<p><i>' + features[i].properties.Submitter + '</i> &mdash; ' + Story_text + Translation_note + '</p></div>';
+		//document.getElementById('translation_popup').innerHTML = translation_string;
+	}
+	document.getElementById('results').innerHTML = html_string;
+
+}
+
+/*
+function toggleLangPopup() {
+  var x = document.getElementById("translation_popup");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+*/
+
+
+
+
+</script>
 
 </body>
 </html>
