@@ -20,158 +20,48 @@
       background: #ffffff;
       margin: 0;
       padding: 0;
-      height: 100%;
-      //min-height: 90% !important;
+      min-height: 90% !important;
     }
 
     body.internalPage {
-      //height: 90%;
+      height: 90%;
 }
 
-    #map_block {
-      position: relative;
-      height: 100%;
-      width: 100%;
-    }
-
-    #title {
-      position: absolute;
-      top: 4px;
-      left: 36px;
-      z-index: 5;
-      color: white;
-      font-family: acumin-pro-wide, sans-serif;
-      font-style: normal;
-      font-weight: 700;
-      font-size: 40px;
-    }
-
-    .intro {
-      position: absolute;
-      top: 10px;
-      z-index: 5;
-      color: white;
-      font-family: acumin-pro, sans-serif;
-      font-style: normal;
-      font-weight: 100;
-      font-size: 15px;
-      width: 35%;
-      margin: 0 30%;
-    }
-
-    #left_space {
-      background-color: #0b0028;
-      width: 20%;
-      height: 100%;
-      z-index: 2;
-      display: block;
-      float: left;
-    }
-
-    #map_container {
-      height: 100%;
-      width: 64%;
-      //position: relative;
-      display: block;
-      float: left;
-    }
-
     #map {
-      //border-left: 1px solid #fff;
-      position: relative;
+      border-left: 1px solid #fff;
+      position: absolute;
       //margin: auto;
-      //height: inherit;
-      //width: inherit;
-      width: 100%;
-      height: 100%;
-      //top: 50;
-      //right:50;
-      //bottom: 0;
-      z-index: 2;
-    }
-
-    .mapboxgl-ctrl-attrib {
-      color: #ef3340 !important;
-      background-color: none;
-    }
-
-    a.mapbox-improve-map {
-      color: #5508d3 !important;
-    }
-
-    .mapboxgl-ctrl-logo {
-      
+      width: 78%;
+      height: 50%;
+      top: 0;
+      bottom: 0;
+      z-index: 5;
     }
 
     #filter_section {
-      background-color: #fcf5e4;
-      display: block;
-      float: left;
-      width: 16%;
-      height: 100%;
-      z-index: 1;
+      background-color: #FFB67A;
+      float: right;
+      width: 22%;
+      z-index: 2;
     }
 
     #filter_content {
       margin-left: 0.4em;
-
-    }
-
-    #checklist h3 {
-      color: #5508d3;
-      font-family: acumin-pro, sans-serif;
-      font-style: normal;
-      font-weight: 200;
-    }
-
-    #checklist p {
-      color: #5508d3;
-      font-family: acumin-pro, sans-serif;
-      font-style: normal;
-      font-weight: 700;
-    }
-
-    .checkbox {
-      color: #5508d3;
-    }
-
-    input[type="checkbox"]{
-      outline:2px solid #5508d3;
-      outline-offset: -2px;
-      background: #fcf5e4;
-    }
-
-    label {
-      color: #5508d3;
-      font-size: 15px;
-      font-family: acumin-pro, sans-serif;
-      font-style: normal;
-      font-weight: 100;
     }
 
     #results {
       position: absolute;
-      top: 65px;
-      width: 33vw;
-      height: calc(100% - 100px);
-      margin-left: 3vw;
-      z-index: 10;
-      overflow-y: auto;
-      scrollbar-width: none; /* Firefox */
-      -ms-overflow-style: none;  /* Internet Explorer 10+ */
+      height: 50%;
+      z-index: 1;
     }
 
-    #results::-webkit-scrollbar { /* WebKit */
-      width: 0;
-      height: 0;
+    .intro {
+      margin-top: 0.8em;
+      padding: 0.3em;
+      background-color: #FFF343;
+      font-style: italic;
+      width: 80%;
     }
-
-    .story_item {
-      margin-bottom: 40px;
-      padding: 25px;
-      background-color: #fafafa;;
-      opacity: 0.9;
-}
 
     .filter-label {
       margin-block-start: 6px !important;
@@ -218,7 +108,7 @@
     content: "\E927";
     margin-left: 20px;
     font-size: 1.4rem;
-    color: #5508d3;
+    color: white;
     display: block;
     float: right;
     right-margin: 3px;
@@ -234,12 +124,6 @@ body {
 
 .goog-te-gadget{
     color: transparent !important;
-}
-
-.goog-te-combo{
-    color: #5508d3 !important;
-    background-color: #fcf5e4 !important;
-    border-style: none;
 }
 
 .goog-tooltip {
@@ -290,13 +174,8 @@ body {
 
 <body class="InternalPage">
 
-<div id="map_block">
-<div id="title">Clusters</div>
-<div class="intro">Click on the circles above to see a list of stories for that area. Or zoom in to see the stories from specific locations.</div>
-<div id="left_space"> </div>
-<div id="map_container">
+
 <div id='map'></div>
-</div>
 
 <!--   -->
 <div id="filter_section">
@@ -316,17 +195,17 @@ body {
   <div id="checklist">
   <h3>Filter options</h3>
   <p class="filter-label">Category</p>
-  <input type="checkbox" id="checkOutreach" class="catCheck" name="catSelect" value="Outreach" onclick="runFilter()"><label for="checkbox">Outreach</label><br>
-  <input type="checkbox" id="checkHealth" class="catCheck" name="catSelect" value="Health" onclick="runFilter()"><label for="checkbox">Health</label><br>
-  <input type="checkbox" id="checkPSS" class="catCheck" name="catSelect" value="Psycho-social" onclick="runFilter()"><label for="checkbox">Psycho-social</label><br>
+  <input type="checkbox" id="checkOutreach" class="catCheck" name="catSelect" value="Outreach" onclick="runFilter()">Outreach<br>
+  <input type="checkbox" id="checkHealth" class="catCheck" name="catSelect" value="Health" onclick="runFilter()">Health<br>
+  <input type="checkbox" id="checkPSS" class="catCheck" name="catSelect" value="Psycho-social" onclick="runFilter()">Psycho-social<br>
   <p class="filter-label">Sentiment</p>
-  <input type="checkbox" id="checkIndivHeroism" class="sentCheck" name="catSelect" value="Individual - Everyday heroism and volunteers sacrifices" onclick="runFilter()"><label for="checkbox">Individual - Heroism</label><br>
-  <input type="checkbox" id="checkIndivVulnerability" class="sentCheck" name="catSelect" value="Individual - Volunteers fragility, needs and vulnerabilities" onclick="runFilter()"><label for="checkbox">Individual - Vulnerability</label><br>
-  <input type="checkbox" id="checkIndivCoping" class="sentCheck" name="catSelect" value="Individual - Volunteering as coping mechanism" onclick="runFilter()"><label for="checkbox">Individual - Coping</label><br>
-  <input type="checkbox" id="checkCommOpportunity" class="sentCheck" name="catSelect" value="Community - Crisis as opportunity" onclick="runFilter()"><label for="checkbox">Community - Opportunity</label><br>
-  <input type="checkbox" id="checkCommRisks" class="sentCheck" name="catSelect" value="Community - Existing and increased risks" onclick="runFilter()"><label for="checkbox">Community - Risks</label><br>
-  <input type="checkbox" id="checkIntlBelonging" class="sentCheck" name="catSelect" value="International - Reinforced belonging and common purpose" onclick="runFilter()"><label for="checkbox">Global - Belonging</label><br>
-  <input type="checkbox" id="checkIntlResponsibility" class="sentCheck" name="catSelect" value="International - Increased responsibility" onclick="runFilter()"><label for="checkbox">Global - Responsibility</label><br>
+  <input type="checkbox" id="checkIndivHeroism" class="sentCheck" name="catSelect" value="Individual - Everyday heroism and volunteers sacrifices" onclick="runFilter()">Individual - Heroism<br>
+  <input type="checkbox" id="checkIndivVulnerability" class="sentCheck" name="catSelect" value="Individual - Volunteers fragility, needs and vulnerabilities" onclick="runFilter()">Individual - Vulnerability<br>
+  <input type="checkbox" id="checkIndivCoping" class="sentCheck" name="catSelect" value="Individual - Volunteering as coping mechanism" onclick="runFilter()">Individual - Coping<br>
+  <input type="checkbox" id="checkCommOpportunity" class="sentCheck" name="catSelect" value="Community - Crisis as opportunity" onclick="runFilter()">Community - Opportunity<br>
+  <input type="checkbox" id="checkCommRisks" class="sentCheck" name="catSelect" value="Community - Existing and increased risks" onclick="runFilter()">Community - Risks<br>
+  <input type="checkbox" id="checkIntlBelonging" class="sentCheck" name="catSelect" value="International - Reinforced belonging and common purpose" onclick="runFilter()">Global - Belonging<br>
+  <input type="checkbox" id="checkIntlResponsibility" class="sentCheck" name="catSelect" value="International - Increased responsibility" onclick="runFilter()">Global - Responsibility<br>
   </div>
 <!--
   <hr>
@@ -335,9 +214,10 @@ body {
 </form>
 </div>
 </div>
-</div>
+
 
 <div id="results">
+<div class="intro">Click on the circles above to see a list of stories for that area. Or zoom in to see the stories from specific locations.</div>
 <div id="filter_note">For filtering options, turn your device sideways to landscape view.</div>
 </div>
 
@@ -350,7 +230,7 @@ var map = new mapboxgl.Map({
     container: 'map', // container id
     style: 'mapbox://styles/ianod/ck9a7c8lu11431ipbyvxb1pph', //stylesheet location
     center: [7.84999, 17.69575], // starting position
-    zoom: 0.75, // starting zoom -- was 85
+    zoom: 0.85, // starting zoom
     maxZoom: 5
 });
 
@@ -391,7 +271,6 @@ $(document).ready(function() {
 
      });
      attachCheckboxHandlers();
-
 });
 
 // Read the data from the spreadsheet is as a GeoJSON
@@ -407,8 +286,6 @@ function makeGeoJSON(csvData) {
 
     });
 
-     // to correct sizing issue on load
-     window.dispatchEvent(new Event('resize'));
 }
 
 
@@ -423,13 +300,8 @@ map.on('error', e => {
     // Reload on data load error.
     if (e.toString().substr(0,19) || e.error.toString().substr(0,19) === 'Input data given to')
         console.log('Error loading data. Retrying ...');
-var delayInMilliseconds = 2000; 
-setTimeout(function() {
- //add your code here to execute
- }, delayInMilliseconds);
         location.reload();
 });
-
 
 
 function buildLayers(data, clusterFilter, individualFilter) {
@@ -469,7 +341,7 @@ function buildLayers(data, clusterFilter, individualFilter) {
                 source: 'Stories',
                 filter: clusterFilter,
                 paint: {
-                    'circle-color': 'rgba(11,0,40,.6)',
+                    'circle-color': 'rgba(0,0,0,.6)',
                     'circle-radius': {
                          property: "point_count",
                          stops: [
@@ -479,8 +351,8 @@ function buildLayers(data, clusterFilter, individualFilter) {
                              [100, 30]
                               ]
                      },
-                    'circle-stroke-color': '#ef3340',
-                    'circle-stroke-width': 2
+                    'circle-stroke-color': '#8dd3c7',
+                    'circle-stroke-width': 5
                 }
             });
 
@@ -510,10 +382,10 @@ function buildLayers(data, clusterFilter, individualFilter) {
                 source: 'Stories',
                 filter: individualFilter,
                 paint: {
-                    'circle-color': 'rgba(11,0,40,.6)',
+                    'circle-color': 'rgba(0,0,0,.6)',
                     'circle-radius': 8,
-                    'circle-stroke-width': 2,
-                    'circle-stroke-color': '#ef3340'
+                    'circle-stroke-width': 5,
+                    'circle-stroke-color': '#8dd3c7'
                 }
             });
 
@@ -579,7 +451,7 @@ function buildLayers(data, clusterFilter, individualFilter) {
 
             });
  
-            //document.getElementById('results').style.top = (document.getElementById('map').offsetHeight) + "px";
+            document.getElementById('results').style.top = (document.getElementById('map').offsetHeight) + "px";
 }
 
 
@@ -673,7 +545,7 @@ function attachCheckboxHandlers() {
 
 function buildResults(features) {
 	var arrayLength = features.length;
-	var html_string = '';
+	var html_string = '<h3>Results</h3>';
 	var Translation_note = '';
 	var translation_string = '';
 	for (var i = 0; i < arrayLength; i++) {
@@ -690,8 +562,8 @@ function buildResults(features) {
 			Translation_note = '';
 			//Translation_string = '';
 		}
-		//html_string += '<button type="button" class="collapsible"><b>'+ features[i].properties.TitleEnglish + '</b>, ' + features[i].properties.NationalSociety + '</button>';
-		html_string += '<div class="story_item" style="display: block;"><b>'+ features[i].properties.TitleEnglish + '</b>, ' + features[i].properties.NationalSociety + '<br>' + Translation_note + '<p><i>' + features[i].properties.Submitter + '</i> &mdash; ' + Story_text + '</p></div>';
+		html_string += '<button type="button" class="collapsible"><b>'+ features[i].properties.TitleEnglish + '</b>, ' + features[i].properties.NationalSociety + '</button>';
+		html_string += '<div class="collapsed_content" style="display: none;">' + Translation_note + '<p><i>' + features[i].properties.Submitter + '</i> &mdash; ' + Story_text + '</p></div>';
 		//document.getElementById('translation_popup').innerHTML = translation_string;
 	}
 	document.getElementById('results').innerHTML = html_string;
