@@ -71,22 +71,14 @@
     #map_container {
       height: 100%;
       width: 64%;
-      //position: relative;
       display: block;
       float: left;
     }
 
     #map {
-      //border-left: 1px solid #fff;
-      position: relative;
-      //margin: auto;
-      //height: inherit;
-      //width: inherit;
+      position: relative;;
       width: 100%;
       height: 100%;
-      //top: 50;
-      //right:50;
-      //bottom: 0;
       z-index: 2;
     }
 
@@ -168,10 +160,43 @@
 
     .story_item {
       margin-bottom: 40px;
-      padding: 25px;
-      background-color: #fafafa;;
+      padding: 18px;
+      background-color: #fcf5e4;
       opacity: 0.9;
-}
+    }
+
+    .story_item p {
+      margin-bottom: 0px;
+    }
+
+    #Stories_title {
+      display: block;
+      margin-block-start: 0em !important:
+      margin-bottom: 12px:
+      color: #0b0028;
+      font-size: 32px;
+      font-family: acumin-pro, sans-serif;
+      font-style: normal;
+      font-weight: 700;
+    }
+
+    #Stories_subtitle {
+      display: block;
+      margin-bottom: 12px:
+      color: #0b0028;
+      font-size: 18px;
+      font-family: acumin-pro, sans-serif;
+      font-style: normal;
+      font-weight: 100;
+    }
+    #Stories_scroll_note {
+      display: block;
+      color: #0b0028;
+      font-size: 14px;
+      font-family: acumin-pro, sans-serif;
+      font-style: normal;
+      font-weight: 100;
+    }
 
     .filter-label {
       margin-block-start: 6px !important;
@@ -221,7 +246,7 @@
     color: #5508d3;
     display: block;
     float: right;
-    right-margin: 3px;
+    right-margin: 6px;
 }
 
 body {
@@ -385,7 +410,7 @@ var individualFilter = baseIndividualFilter;
 $(document).ready(function() {
     $.ajax({
         type: "GET",
-        url: 'https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/e/2PACX-1vRZrfy0aAVCUxbI37nwAI10oVZcxdm06XpU2i-Mcnc_NjDRouUO2cR5VsAUnNmE6lWabDVcovuHkJy7/pub?gid=393242394&single=true&output=csv',
+        url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZrfy0aAVCUxbI37nwAI10oVZcxdm06XpU2i-Mcnc_NjDRouUO2cR5VsAUnNmE6lWabDVcovuHkJy7/pub?gid=393242394&single=true&output=csv',
         dataType: "text",
         success: function(csvData) {makeGeoJSON(csvData);}
 
@@ -627,9 +652,9 @@ $("input:checkbox").click(function() {
         $(group).prop("checked", false);
         $(this).click();
         $(this).prop("checked", true);
-	document.getElementById('results').innerHTML = '<div class="intro">Click on the circles above to see a list of stories for that area. Or zoom in to see the stories from specific locations.</div>';
+	document.getElementById('results').innerHTML = '';
     } else {
-	document.getElementById('results').innerHTML = '<div class="intro">Click on the circles above to see a list of stories for that area. Or zoom in to see the stories from specific locations.</div>';
+	document.getElementById('results').innerHTML = '';
         //$(this).prop("checked", false);
     }
 });
@@ -673,7 +698,7 @@ function attachCheckboxHandlers() {
 
 function buildResults(features) {
 	var arrayLength = features.length;
-	var html_string = '';
+	var html_string = '<div class="story_item" style="display: block;"><p id="Stories_title">COVID volunteer stories</p><p id="Stories_subtitle">Inspiring stories from Red Cross and Red Crescent volunteers responding to COVID-19</p><p id="Stories_scroll_note">Scroll down</p></div>';
 	var Translation_note = '';
 	var translation_string = '';
 	for (var i = 0; i < arrayLength; i++) {
