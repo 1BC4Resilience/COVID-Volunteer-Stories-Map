@@ -59,7 +59,7 @@
 
     #left_space {
       background-color: #0b0028;
-      width: 20%;
+      width: 0%;
       height: 100%;
       z-index: 2;
       display: block;
@@ -68,7 +68,7 @@
 
     #map_container {
       height: 100%;
-      width: 62%;
+      width: 82%;
       display: block;
       float: left;
     }
@@ -237,6 +237,7 @@
       font-style: normal;
       font-weight: 100;
     }
+
     #Stories_scroll_note {
       display: block;
       margin-block-end: 0px;
@@ -286,58 +287,134 @@
 
 /* Translation settings */
 
-#google_translate_element:before {
-    font-family: 'Material Icons';
-    content: "\E927";
-    margin-left: 20px;
-    font-size: 1.4rem;
-    color: #5508d3;
-    display: block;
-    float: right;
-    right-margin: 6px;
+    #google_translate_element:before {
+      font-family: 'Material Icons';
+      content: "\E927";
+      margin-left: 20px;
+      font-size: 1.4rem;
+      color: #5508d3;
+      display: block;
+      float: right;
+      right-margin: 6px;
+    }
+
+    body {
+      top: 0px !important;
+    }
+
+    .goog-logo-link {
+      display:none !important;
+    } 
+
+    .goog-te-gadget {
+      color: transparent !important;
+    }
+
+    .goog-te-combo {
+      color: #5508d3 !important;
+      background-color: #fcf5e4 !important;
+      border-style: none;
+      font-size: 13px !important;
+      font-family: acumin-pro, sans-serif !important;
+      font-style: normal !important;
+      font-weight: 100 !important;
+    }
+
+    .goog-tooltip {
+      display: none !important;
+    }
+
+    .goog-tooltip:hover {
+      display: none !important;
+    }
+
+    .goog-text-highlight {
+      background-color: transparent !important;
+      border: none !important; 
+      box-shadow: none !important;
+    }
+
+    .goog-te-banner-frame.skiptranslate {
+      display: none !important;
+    } 
+
+@media screen and (max-width: 910px) {
+
+    #google_translate_element:before {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      float: right;
+    }
+
 }
 
-body {
-    top: 0px !important;
+@media screen and (max-width: 800px) {
+
+    #title {
+      left: 10px;
+      font-size: 36px;
+    }
+
+    #left_space {
+      display:none;
+    }
+
+    #map_container {
+      width: 82%;
+    }
+
+    .intro {
+      top: 10px;
+      font-size: 12px;
+      width: 40%;
+      margin: 0 30%;
+    }
+
+    .goog-te-combo {
+      font-size: 12px !important;
+    }
+
+
+    #google_translate_element {
+      //width: 80%;
+    }
+
+    #google_translate_element:before {
+      font-size: 1.1rem;
+    }
+
+    #checklist h3 {
+      font-size: 13px;
+    }
+
+    #checklist p {
+      font-size: 13px;
+    }
+
+    INPUT[type=checkbox] {
+      width: 13px;
+      height: 13px;
+    }
+
+    label {
+      font-size: 12px;
+    }
+
+    #results {
+      width: 50vw;
+    }
+
+    #Stories_title {
+      font-size: 24px;
+    }
+
 }
-
-.goog-logo-link {
-    display:none !important;
-} 
-
-.goog-te-gadget{
-    color: transparent !important;
-}
-
-.goog-te-combo{
-    color: #5508d3 !important;
-    background-color: #fcf5e4 !important;
-    border-style: none;
-}
-
-.goog-tooltip {
-    display: none !important;
-}
-
-.goog-tooltip:hover {
-    display: none !important;
-}
-
-.goog-text-highlight {
-    background-color: transparent !important;
-    border: none !important; 
-    box-shadow: none !important;
-}
-
-.goog-te-banner-frame.skiptranslate {
-    display: none !important;
-} 
-
 
 @media screen and (max-width: 500px) {
 
     #title {
       left: 10px;
+      font-size: 32px;
     }
 
     #left_space {
@@ -443,8 +520,8 @@ var map = new mapboxgl.Map({
     container: 'map', // container id
     style: 'mapbox://styles/ianod/ck9a7c8lu11431ipbyvxb1pph', //stylesheet location
     center: [7.84999, 17.69575], // starting position
-    zoom: 0.75, // starting zoom -- was 85
-    maxZoom: 5
+    zoom: 1, // starting zoom -- was 85
+    //maxZoom: 5
 });
 
 // disable map rotation using right click + drag
