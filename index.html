@@ -580,12 +580,20 @@ function makeGeoJSON(csvData) {
         data_geoJSON.features = data_geoJSON.features.filter(feature => feature.properties.ValidatedForMap == 'Yes');
         full_geoJSON = JSON.parse(JSON.stringify(data));
 
+        map.on('load', function () {
+
+            // to correct sizing issue on load
+  	    window.dispatchEvent(new Event('resize'));
+
+     	    buildLayers(data_geoJSON, clusterFilter, individualFilter);
+        });
+
     });
 
      // to correct sizing issue on load
-     window.dispatchEvent(new Event('resize'));
+     //window.dispatchEvent(new Event('resize'));
 
-     buildLayers(data_geoJSON, clusterFilter, individualFilter);
+     //buildLayers(data_geoJSON, clusterFilter, individualFilter);
 }
 
 
