@@ -185,7 +185,7 @@
     }
 
     #results {
-      position: absolute;
+      position: fixed;
       top: 65px;
       width: 33vw;
       height: 0px;
@@ -195,6 +195,7 @@
       overflow-y: auto;
       scrollbar-width: none; /* Firefox */
       -ms-overflow-style: none;  /* Internet Explorer 10+ */
+      -webkit-overflow-scrolling: touch;  /* iOS */
     }
 
     #results::-webkit-scrollbar { /* WebKit */
@@ -335,6 +336,10 @@ body {
 
 @media screen and (max-width: 500px) {
 
+    #title {
+      left: 10px;
+    }
+
     #left_space {
       display: none;
     }
@@ -355,18 +360,23 @@ body {
 
     .intro {
       top: 10px;
-      font-size: 12px;
+      font-size: 11px;
       width: 42%;
       margin: 0 44%;
+    }
+
+    #filter_note {
+      display: inline;
+      color: #ef3340;
+      font-weight: 200;
     }
 
     #results {
       width: 53vw;
     }
 
-    #filter_note {
-      display: inline;
-      color: #ef3340;
+    #Stories_title {
+      font-size: 24px;
     }
 
 }
@@ -377,7 +387,7 @@ body {
 
 <div id="map_block">
 <div id="title">Clusters</div>
-<div class="intro">Click on the circles above to see a list of stories for that area. Or zoom in to see stories from specific locations.<span id="filter_note"> For filters, turn your device sideways.</span></div>
+<div class="intro">Click on circles below to see stories for that area. Or zoom in to see stories from specific locations.<span id="filter_note"> For filters, turn device sideways.</span></div>
 <div id="left_space"> </div>
 <div id="map_container">
 <div id='map'></div>
