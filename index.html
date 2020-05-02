@@ -438,8 +438,8 @@
     .intro {
       top: 10px;
       font-size: 11px;
-      width: 42%;
-      margin: 0 44%;
+      width: 46%;
+      margin: 0 41%;
     }
 
     #filter_note {
@@ -507,6 +507,7 @@
 </form>
 </div>
 </div>
+<button id="clear_stories_button">Clear stories</button>
 </div>
 
 <div id="results"></div>
@@ -823,6 +824,7 @@ function buildResults(features) {
 		//document.getElementById('translation_popup').innerHTML = translation_string;
 	}
 	document.getElementById('results').innerHTML = html_string;
+	document.getElementById('results').scrollTop = 0;
 
 }
 
