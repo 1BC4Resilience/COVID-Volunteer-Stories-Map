@@ -186,7 +186,7 @@
 
     #results {
       position: fixed;
-      top: 65px;
+      top: 68px;
       width: 33vw;
       height: 0px;
       //height: calc(100% - 72px);
@@ -201,6 +201,26 @@
     #results::-webkit-scrollbar { /* WebKit */
       width: 0;
       height: 0;
+    }
+
+    #button_container {
+      position: fixed; 
+      width: 33vw;   
+      z-index: 15;
+    }
+
+    #results_close {
+      float: right;
+      background-color: #fcf5e4;
+      opacity: 0.5;
+      color: #5508d3;
+      font-size: 14px;
+      font-family: acumin-pro, sans-serif;
+      font-style: normal;
+      font-weight: 300;
+      //display:inline-block;
+      //padding:2px 5px;
+      //background:#ccc;
     }
 
     .story_item {
@@ -452,6 +472,10 @@
       width: 53vw;
     }
 
+    #button_container {
+      width: 53vw;   
+    }
+
     #Stories_title {
       font-size: 24px;
     }
@@ -582,18 +606,18 @@ function makeGeoJSON(csvData) {
 
         map.on('load', function () {
 
-            // to correct sizing issue on load
-  	    window.dispatchEvent(new Event('resize'));
+        	setTimeout(function(){
 
-     	    buildLayers(data_geoJSON, clusterFilter, individualFilter);
+            		// to correct sizing issue on load
+  	    		window.dispatchEvent(new Event('resize'));
+
+     	   	 	buildLayers(data_geoJSON, clusterFilter, individualFilter);
+
+       	 	}, 1200); 
+
         });
 
     });
-
-     // to correct sizing issue on load
-     //window.dispatchEvent(new Event('resize'));
-
-     //buildLayers(data_geoJSON, clusterFilter, individualFilter);
 }
 
 
@@ -730,7 +754,6 @@ function buildLayers(data, clusterFilter, individualFilter) {
 					center: features[0].geometry.coordinates,
 					zoom: zoom
 				});
-
                 }
             );
 
@@ -808,11 +831,11 @@ $("input:checkbox").click(function() {
 function buildResults(features) {
 
 	var arrayLength = features.length;
-	var html_string = '<div class="story_item" style="display: block;"><p id="Stories_title">COVID volunteer stories</p><p id="Stories_subtitle">Inspiring stories from Red Cross and Red Crescent volunteers responding to COVID-19</p><p id="Stories_scroll_note">Scroll down</p></div>';
+	var html_string = '<div id="button_container"><button id="results_close" onclick="closeResultsDiv()">X</button></div><div class="story_item" style="display: block;"><p id="Stories_title">COVID volunteer stories</p><p id="Stories_subtitle">Inspiring stories from Red Cross and Red Crescent volunteers responding to COVID-19</p><p id="Stories_scroll_note">Scroll down</p></div>';
 	var Translation_note = '';
 	var translation_string = '';
 
-	document.getElementById('results').style.height = 'calc(100% - 72px)';
+	document.getElementById('results').style.height = 'calc(100% - 75px)';
 	for (var i = 0; i < arrayLength; i++) {
 
 		if (features[i].properties.Summary !=='') {
@@ -832,6 +855,7 @@ function buildResults(features) {
 		//document.getElementById('translation_popup').innerHTML = translation_string;
 	}
 	document.getElementById('results').innerHTML = html_string;
+	document.getElementById('results').style.display = 'block';
 	document.getElementById('results').scrollTop = 0;
 
 }
@@ -847,8 +871,10 @@ function toggleLangPopup() {
 }
 */
 
-
-
+function closeResultsDiv() {
+  console.log('Close button clicked.');
+  document.getElementById('results').style.display = 'none';
+}
 
 </script>
 
