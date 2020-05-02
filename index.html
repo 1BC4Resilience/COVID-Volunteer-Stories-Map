@@ -184,7 +184,8 @@
       position: absolute;
       top: 65px;
       width: 33vw;
-      height: calc(100% - 72px);
+      height: 0px;
+      //height: calc(100% - 72px);
       margin-left: 3vw;
       z-index: 10;
       overflow-y: auto;
@@ -390,17 +391,17 @@ body {
   <div id="checklist">
   <h3>Filter options</h3>
   <p class="filter-label">Category</p>
-  <label for="checkbox"><input type="checkbox" id="checkOutreach" class="catCheck" name="catSelect" value="Outreach" onclick="runFilter()">Outreach</label><br>
-  <label for="checkbox"><input type="checkbox" id="checkHealth" class="catCheck" name="catSelect" value="Health" onclick="runFilter()">Health</label><br>
-  <label for="checkbox"><input type="checkbox" id="checkPSS" class="catCheck" name="catSelect" value="Psycho-social" onclick="runFilter()">Psycho-social</label><br>
+  <label><input type="checkbox" id="checkOutreach" class="catCheck" name="catSelect" value="Outreach" onclick="runFilter()">Outreach</label><br>
+  <label><input type="checkbox" id="checkHealth" class="catCheck" name="catSelect" value="Health" onclick="runFilter()">Health</label><br>
+  <label><input type="checkbox" id="checkPSS" class="catCheck" name="catSelect" value="Psycho-social" onclick="runFilter()">Psycho-social</label><br>
   <p class="filter-label">Sentiment</p>
-  <label for="checkbox"><input type="checkbox" id="checkIndivHeroism" class="sentCheck" name="catSelect" value="Individual - Everyday heroism and volunteers sacrifices" onclick="runFilter()">Individual - Heroism</label><br>
-  <label for="checkbox"><input type="checkbox" id="checkIndivVulnerability" class="sentCheck" name="catSelect" value="Individual - Volunteers fragility, needs and vulnerabilities" onclick="runFilter()">Individual - Vulnerability</label><br>
-  <label for="checkbox"><input type="checkbox" id="checkIndivCoping" class="sentCheck" name="catSelect" value="Individual - Volunteering as coping mechanism" onclick="runFilter()">Individual - Coping</label><br>
-  <label for="checkbox"><input type="checkbox" id="checkCommOpportunity" class="sentCheck" name="catSelect" value="Community - Crisis as opportunity" onclick="runFilter()">Community - Opportunity</label><br>
-  <label for="checkbox"><input type="checkbox" id="checkCommRisks" class="sentCheck" name="catSelect" value="Community - Existing and increased risks" onclick="runFilter()">Community - Risks</label><br>
-  <label for="checkbox"><input type="checkbox" id="checkIntlBelonging" class="sentCheck" name="catSelect" value="International - Reinforced belonging and common purpose" onclick="runFilter()">Global - Belonging</label><br>
-  <label for="checkbox"><input type="checkbox" id="checkIntlResponsibility" class="sentCheck" name="catSelect" value="International - Increased responsibility" onclick="runFilter()">Global - Responsibility</label><br>
+  <label><input type="checkbox" id="checkIndivHeroism" class="sentCheck" name="catSelect" value="Individual - Everyday heroism and volunteers sacrifices" onclick="runFilter()">Individual - Heroism</label><br>
+  <label><input type="checkbox" id="checkIndivVulnerability" class="sentCheck" name="catSelect" value="Individual - Volunteers fragility, needs and vulnerabilities" onclick="runFilter()">Individual - Vulnerability</label><br>
+  <label><input type="checkbox" id="checkIndivCoping" class="sentCheck" name="catSelect" value="Individual - Volunteering as coping mechanism" onclick="runFilter()">Individual - Coping</label><br>
+  <label><input type="checkbox" id="checkCommOpportunity" class="sentCheck" name="catSelect" value="Community - Crisis as opportunity" onclick="runFilter()">Community - Opportunity</label><br>
+  <label><input type="checkbox" id="checkCommRisks" class="sentCheck" name="catSelect" value="Community - Existing and increased risks" onclick="runFilter()">Community - Risks</label><br>
+  <label><input type="checkbox" id="checkIntlBelonging" class="sentCheck" name="catSelect" value="International - Reinforced belonging and common purpose" onclick="runFilter()">Global - Belonging</label><br>
+  <label><input type="checkbox" id="checkIntlResponsibility" class="sentCheck" name="catSelect" value="International - Increased responsibility" onclick="runFilter()">Global - Responsibility</label><br>
   </div>
 <!--
   <hr>
@@ -688,18 +689,23 @@ $("input:checkbox").click(function() {
         $(this).click();
         $(this).prop("checked", true);
 	document.getElementById('results').innerHTML = '';
+	document.getElementById('results').style.height = '0px';
     } else {
 	document.getElementById('results').innerHTML = '';
+	document.getElementById('results').style.height = '0px';
         //$(this).prop("checked", false);
     }
 });
 
 
 function buildResults(features) {
+
 	var arrayLength = features.length;
 	var html_string = '<div class="story_item" style="display: block;"><p id="Stories_title">COVID volunteer stories</p><p id="Stories_subtitle">Inspiring stories from Red Cross and Red Crescent volunteers responding to COVID-19</p><p id="Stories_scroll_note">Scroll down</p></div>';
 	var Translation_note = '';
 	var translation_string = '';
+
+	document.getElementById('results').style.height = 'calc(100% - 72px)';
 	for (var i = 0; i < arrayLength; i++) {
 		if (features[i].properties.Summary !=='') {
 			var Story_text = features[i].properties.Summary;
