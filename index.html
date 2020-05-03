@@ -212,16 +212,15 @@
 
     #results_close {
       float: right;
-      background-color: #5508d3;
-      opacity: 0.6;
+      background-color: transparent;
+      //background-color: #5508d3;
+      //opacity: 0.6;
       color: #ffffff;
-      font-size: 14px;
+      border: none;
+      font-size: 15px;
       font-family: acumin-pro, sans-serif;
       font-style: normal;
-      font-weight: 600;
-      //display:inline-block;
-      //padding:2px 5px;
-      //background:#ccc;
+      font-weight: 700;
     }
 
     .story_item {
@@ -579,6 +578,9 @@ var baseIndividualFilter = ['!', ['has', 'point_count']];
 var clusterFilter =  baseClusterFilter;  
 var individualFilter = baseIndividualFilter;
 
+var auotReloadNumber = 0;
+var auotReloadLimit = 2;
+
 
 $(document).ready(function() {
     $.ajax({
@@ -616,6 +618,21 @@ map.on('load', function () {
 
        	 }, 1500); 
 
+});
+
+map.on('error', e => {
+    // Reload on data load error.
+    autoReloadNumber += 1;
+    if (autoReloadNumber < autoReloadLimit) {
+        if (e.toString().substr(0,19) || e.error.toString().substr(0,19) === 'Input data given to') {
+            console.log('Error loading data. Retrying ...');
+            setTimeout(function(){
+
+     	       buildLayers(data_geoJSON, clusterFilter, individualFilter);
+
+            }, 2000); 
+        }
+    }
 });
 
 
@@ -849,7 +866,12 @@ function buildResults(features) {
 			Translation_note = '<div class="translation_note_box"><p class="link_to_original" style="text-align: right;">(See the <a href="' + features[i].properties.Link + '" target="_blank">original post</a>.)</p></div>';
 			//Translation_string = '';
 		}
-		html_string += '<div class="story_item" style="display: block;"><b>'+ features[i].properties.TitleEnglish + '</b>, ' + features[i].properties.NationalSociety + '<br>' + '<p><i>' + features[i].properties.Submitter + '</i> &mdash; ' + Story_text + Translation_note + '</p></div>';
+		if (features[i].properties.Image !=='') {
+			var Image_text = '<img src="' + features[i].properties.Image + '" width="100%"><br>';
+		} else {
+			var Image_text = '';
+		}
+		html_string += '<div class="story_item" style="display: block;"><b>'+ features[i].properties.TitleEnglish + '</b>, ' + features[i].properties.NationalSociety + '<br>' + Image_text + '<p><i>' + features[i].properties.Submitter + '</i> &mdash; ' + Story_text + Translation_note + '</p></div>';
 		//document.getElementById('translation_popup').innerHTML = translation_string;
 	}
 	document.getElementById('results').innerHTML = html_string;
