@@ -212,13 +212,13 @@
 
     #results_close {
       float: right;
-      background-color: #fcf5e4;
-      opacity: 0.5;
-      color: #5508d3;
+      background-color: #5508d3;
+      opacity: 0.6;
+      color: #ffffff;
       font-size: 14px;
       font-family: acumin-pro, sans-serif;
       font-style: normal;
-      font-weight: 300;
+      font-weight: 600;
       //display:inline-block;
       //padding:2px 5px;
       //background:#ccc;
@@ -270,8 +270,8 @@
     }
 
     .filter-label {
-      margin-block-start: 6px !important;
-      margin-block-end: 4px !important;
+      margin-block-start: 16px !important;
+      margin-block-end: 3px !important;
     }
 
     #filterSubmitButton {
@@ -421,7 +421,7 @@
       font-size: 12px;
     }
 
-    #results {
+    #results, #button_container {
       width: 50vw;
     }
 
@@ -469,12 +469,8 @@
       font-weight: 200;
     }
 
-    #results {
+    #results, #button_container {
       width: 53vw;
-    }
-
-    #button_container {
-      width: 53vw;   
     }
 
     #Stories_title {
@@ -603,26 +599,22 @@ function makeGeoJSON(csvData) {
 
         data_geoJSON = data;
         data_geoJSON.features = data_geoJSON.features.filter(feature => feature.properties.ValidatedForMap == 'Yes');
-        full_geoJSON = JSON.parse(JSON.stringify(data));
-
-        map.on('load', function () {
-
-        	setTimeout(function(){
-
-            		// to correct sizing issue on load
-  	    		window.dispatchEvent(new Event('resize'));
-
-     	   	 	buildLayers(data_geoJSON, clusterFilter, individualFilter);
-
-       	 	}, 1200); 
-
-        });
+        full_geoJSON = JSON.parse(JSON.stringify(data_geoJSON));
 
     });
 }
 
 
 map.on('load', function () {
+
+        setTimeout(function(){
+
+            	// to correct sizing issue on load
+  	    	window.dispatchEvent(new Event('resize'));
+
+     	   	 buildLayers(data_geoJSON, clusterFilter, individualFilter);
+
+       	 }, 1500); 
 
 });
 
@@ -751,8 +743,10 @@ function buildLayers(data, clusterFilter, individualFilter) {
 				if (zoom > 5) {
 					zoom = 5;
 				}
+				var center_coordinates = features[0].geometry.coordinates;
+				center_coordinates[0] = features[0].geometry.coordinates[0] - 2; //offset to west to align map better next to Results div
 				map.easeTo({
-					center: features[0].geometry.coordinates,
+					center: center_coordinates,
 					zoom: zoom
 				});
                 }
@@ -766,8 +760,10 @@ function buildLayers(data, clusterFilter, individualFilter) {
 
                 var features = map.queryRenderedFeatures(e.point, { layers: ['unclustered-point'] });
                 buildResults(features);
+		var center_coordinates = features[0].geometry.coordinates;
+		center_coordinates[0] = features[0].geometry.coordinates[0] - 3.5; //offset to west to align map better next to Results div
 		map.easeTo({
-			center: features[0].geometry.coordinates,
+			center: center_coordinates,
 			zoom: 4.2
 		});
 
@@ -821,6 +817,7 @@ $("input:checkbox").click(function() {
         $(this).prop("checked", true);
 	document.getElementById('results').innerHTML = '';
 	document.getElementById('results').style.height = '0px';
+        runFilter();
     } else {
 	document.getElementById('results').innerHTML = '';
 	document.getElementById('results').style.height = '0px';
@@ -873,7 +870,6 @@ function toggleLangPopup() {
 */
 
 function closeResultsDiv() {
-  console.log('Close button clicked.');
   document.getElementById('results').style.display = 'none';
 }
 
