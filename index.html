@@ -30,7 +30,7 @@
 
     #title {
       position: absolute;
-      top: 4px;
+      top: 30px;
       left: 36px;
       z-index: 5;
       color: white;
@@ -42,15 +42,15 @@
 
     .intro {
       position: absolute;
-      top: 10px;
+      top: 36px;
       z-index: 5;
       color: white;
       font-family: acumin-pro, sans-serif;
       font-style: normal;
       font-weight: 100;
       font-size: 15px;
-      width: 35%;
-      margin: 0 30%;
+      width: 38%;
+      margin: 0 25%;
     }
 
     #filter_note {
@@ -78,6 +78,10 @@
       width: 100%;
       height: 100%;
       z-index: 2;
+    }
+
+    .mapboxgl-ctrl-top-right {
+        top: 18px;
     }
 
     .mapboxgl-ctrl-group {
@@ -131,7 +135,7 @@
     }
 
     #filter_content {
-      margin-left: 0.6em;
+      margin-left: 1em;
       margin-top: 40px;
     }
 
@@ -186,11 +190,11 @@
 
     #results {
       position: fixed;
-      top: 68px;
-      width: 33vw;
+      top: 78px;
+      width: 36vw;
       height: 0px;
       //height: calc(100% - 72px);
-      margin-left: 3vw;
+      margin-left: 36px;
       z-index: 10;
       overflow-y: auto;
       scrollbar-width: none; /* Firefox */
@@ -206,18 +210,19 @@
 
     #button_container {
       position: fixed; 
-      width: 33vw;   
+      width: 36vw;   
       z-index: 15;
     }
 
     #results_close {
       float: right;
+      top: 4px;
       background-color: transparent;
       //background-color: #5508d3;
       //opacity: 0.6;
-      color: #ffffff;
+      color: #5508d3;
       border: none;
-      font-size: 15px;
+      font-size: 22px;
       font-family: acumin-pro, sans-serif;
       font-style: normal;
       font-weight: 700;
@@ -228,6 +233,10 @@
       padding: 18px;
       background-color: #fcf5e4;
       opacity: 0.9;
+      font-size: 15px;
+      font-family: acumin-pro, sans-serif;
+      font-style: normal;
+      font-weight: 100;
     }
 
     .story_item p {
@@ -236,13 +245,19 @@
       margin-inline-start: 0; 
       margin-block-end: 0;
       margin-inline-end: 0;
+      font-size: 15px;
+      font-family: acumin-pro, sans-serif;
+      font-style: normal;
+      font-weight: 100;
     }
+
     .story_item img {
       margin-block-start: 8px;
     }
 
     #Stories_title {
       display: block;
+      margin-block-start: 0px;
       margin-bottom: 16px:
       color: #0b0028;
       font-size: 32px;
@@ -289,7 +304,7 @@
 
     .link_to_original {
       font-style: italic;
-      margin-block-end: 6px !important;
+      margin-block-end: 2px !important;
     }
 
     #translation_popup {
@@ -363,6 +378,11 @@
 
 @media screen and (max-width: 910px) {
 
+    .intro {
+      width: 40%;
+      margin: 0 25%;
+    }
+
     #google_translate_element:before {
       margin-top: 20px;
       font-size: 1.2rem;
@@ -374,7 +394,7 @@
 @media screen and (max-width: 800px) {
 
     #title {
-      left: 10px;
+      //left: 36px;
       font-size: 36px;
     }
 
@@ -387,10 +407,10 @@
     }
 
     .intro {
-      top: 10px;
+      top: 38px;
       font-size: 12px;
       width: 40%;
-      margin: 0 30%;
+      margin: 0 28%;
     }
 
     .goog-te-combo {
@@ -433,10 +453,24 @@
 
 }
 
+@media screen and (max-width: 675px) {
+
+    .intro {
+      top: 25px;
+      width: 36%;
+      margin: 0 34%;
+    }
+
+}
+
 @media screen and (max-width: 500px) {
 
+    .mapboxgl-ctrl-top-right {
+        top: 10px;
+    }
+
     #title {
-      left: 10px;
+      left: 36px;
       font-size: 32px;
     }
 
@@ -459,10 +493,10 @@
     }
 
     .intro {
-      top: 10px;
+      top: 23px;
       font-size: 11px;
-      width: 46%;
-      margin: 0 41%;
+      width: 48%;
+      margin: 0 39%;
     }
 
     #filter_note {
@@ -472,11 +506,24 @@
     }
 
     #results, #button_container {
-      width: 53vw;
+      width: 58vw;
     }
 
     #Stories_title {
       font-size: 24px;
+    }
+
+}
+
+
+@media screen and (max-width: 400px) {
+
+
+    .intro {
+      top: 10px;
+      font-size: 11px;
+      width: 46%;
+      margin: 0 42%;
     }
 
 }
@@ -764,7 +811,7 @@ function buildLayers(data, clusterFilter, individualFilter) {
 					zoom = 5;
 				}
 				var center_coordinates = features[0].geometry.coordinates;
-				center_coordinates[0] = features[0].geometry.coordinates[0] - 2; //offset to west to align map better next to Results div
+				center_coordinates[0] = features[0].geometry.coordinates[0] - 5; //offset to west to align map better next to Results div
 				map.easeTo({
 					center: center_coordinates,
 					zoom: zoom
@@ -849,11 +896,11 @@ $("input:checkbox").click(function() {
 function buildResults(features) {
 
 	var arrayLength = features.length;
-	var html_string = '<div id="button_container"><button id="results_close" onclick="closeResultsDiv()">X</button></div><div class="story_item" style="display: block;"><p id="Stories_title">COVID volunteer stories</p><p id="Stories_subtitle">Inspiring stories from Red Cross and Red Crescent volunteers responding to COVID-19</p><p id="Stories_scroll_note">Scroll down</p></div>';
+	var html_string = '<div id="button_container"><button id="results_close" onclick="closeResultsDiv()">&times;</button></div><div class="story_item" style="display: block;"><p id="Stories_title">COVID volunteer stories</p><p id="Stories_subtitle">Inspiring stories from Red Cross and Red Crescent volunteers responding to COVID-19</p><p id="Stories_scroll_note">Scroll down</p></div>';
 	var Translation_note = '';
 	var translation_string = '';
 
-	document.getElementById('results').style.height = 'calc(100% - 75px)';
+	document.getElementById('results').style.height = 'calc(100% - 85px)';
 	for (var i = 0; i < arrayLength; i++) {
 
 		if (features[i].properties.Summary !=='') {
