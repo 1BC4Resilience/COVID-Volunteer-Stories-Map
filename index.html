@@ -635,7 +635,7 @@ var autoReloadLimit = 2;
 $(document).ready(function() {
     $.ajax({
         type: "GET",
-        url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZrfy0aAVCUxbI37nwAI10oVZcxdm06XpU2i-Mcnc_NjDRouUO2cR5VsAUnNmE6lWabDVcovuHkJy7/pub?gid=393242394&single=true&output=csv',
+        url: 'https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/e/2PACX-1vRZrfy0aAVCUxbI37nwAI10oVZcxdm06XpU2i-Mcnc_NjDRouUO2cR5VsAUnNmE6lWabDVcovuHkJy7/pub?gid=393242394&single=true&output=csv',
         dataType: "text",
         success: function(csvData) {makeGeoJSON(csvData);}
      });
@@ -921,7 +921,7 @@ function buildResults(features) {
 		} else {
 			var Image_text = '';
 		}
-		html_string += '<div class="story_item" style="display: block;"><b>'+ features[i].properties.TitleEnglish + '</b>, ' + features[i].properties.NationalSociety + '<br>' + Image_text + '<p><i>' + features[i].properties.Submitter + '</i> &mdash; ' + Story_text + Translation_note + '</p></div>';
+		html_string += '<div class="story_item" style="display: block;"><b>'+ features[i].properties.TitleEnglish + '</b>, ' + features[i].properties.NationalSociety + '<br>' + Image_text + '<p><i>' + features[i].properties.Submitter_firstname + '</i> &mdash; ' + Story_text + Translation_note + '</p></div>';
 		//document.getElementById('translation_popup').innerHTML = translation_string;
 	}
 	document.getElementById('results').innerHTML = html_string;
