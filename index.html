@@ -296,6 +296,20 @@
       margin-right: 1em;
     }
 
+    #credit {
+      padding-top: 2em;
+      font-size: 13px;
+      font-family: acumin-pro, sans-serif;
+      font-style: normal;
+      font-weight: 100;
+    }
+
+    .credit_line {
+      display: block;
+      padding-top: 0.4em;
+      padding-left: 12px;
+    }
+
     .translation_note_box {
       margin-top: 4px;
       display: block;
@@ -558,9 +572,12 @@
   <div id="checklist">
   <h3>Filter options</h3>
   <p class="filter-label">Category</p>
-  <label><input type="checkbox" id="checkOutreach" class="catCheck" name="catSelect" value="Outreach" onclick="runFilter()">Outreach</label><br>
-  <label><input type="checkbox" id="checkHealth" class="catCheck" name="catSelect" value="Health" onclick="runFilter()">Health</label><br>
+  <label><input type="checkbox" id="checkOutreach" class="catCheck" name="catSelect" value="vulnerable populations" onclick="runFilter()">Vulnerable populations</label><br>
   <label><input type="checkbox" id="checkPSS" class="catCheck" name="catSelect" value="Psycho-social" onclick="runFilter()">Psycho-social</label><br>
+  <label><input type="checkbox" id="checkCommunciations" class="catCheck" name="catSelect" value="communication" onclick="runFilter()">Communications</label><br>
+  <label><input type="checkbox" id="checkFoodAssistance" class="catCheck" name="catSelect" value="Food assistance" onclick="runFilter()">Food assistance</label><br>
+  <label><input type="checkbox" id="checkHealth" class="catCheck" name="catSelect" value="Health" onclick="runFilter()">Health</label><br>
+  <label><input type="checkbox" id="checkHygiene" class="catCheck" name="catSelect" value="Hygiene" onclick="runFilter()">Hygiene</label><br>
   <p class="filter-label">Sentiment</p>
   <label><input type="checkbox" id="checkIndivHeroism" class="sentCheck" name="catSelect" value="Individual - Everyday heroism and volunteers sacrifices" onclick="runFilter()">Individual - Heroism</label><br>
   <label><input type="checkbox" id="checkIndivVulnerability" class="sentCheck" name="catSelect" value="Individual - Volunteers fragility, needs and vulnerabilities" onclick="runFilter()">Individual - Vulnerability</label><br>
@@ -575,6 +592,13 @@
   <input type="submit" id="filterSubmitButton" value="Filter">
 -->
 </form>
+
+<div id="credit">
+Developed with assistance from:
+<span class="credit_line"><a href="https://www.standbytaskforce.org" target="_blank"><img src="./images/SBTF_logo.png" height="18"></a> members</span>
+<span class="credit_line"><a href="https://www.mapbox.com" target="_blank"><img src="./images/mapbox-logo-black.png" height="18"></a></span>
+</div>
+
 </div>
 </div>
 <button id="clear_stories_button">Clear stories</button>
@@ -899,14 +923,22 @@ function buildResults(features) {
 	var html_string = '<div id="button_container"><button id="results_close" onclick="closeResultsDiv()">&times;</button></div><div class="story_item" style="display: block;"><p id="Stories_title">COVID volunteer stories</p><p id="Stories_subtitle">Inspiring stories from Red Cross and Red Crescent volunteers responding to COVID-19</p><p id="Stories_scroll_note">Scroll down</p></div>';
 	var Translation_note = '';
 	var translation_string = '';
+	var Story_title = '';
+	var Story_text = '';
+	var Image_text = '';
 
 	document.getElementById('results').style.height = 'calc(100% - 85px)';
 	for (var i = 0; i < arrayLength; i++) {
 
-		if (features[i].properties.Summary !=='') {
-			var Story_text = features[i].properties.Summary;
+		if (features[i].properties.EditedTitle !=='') {
+			Story_title = features[i].properties.EditedTitle;
 		} else {
-			var Story_text = features[i].properties.StoryEnglish;
+			Story_title = features[i].properties.TitleEnglish;
+		}
+		if (features[i].properties.EditedEnglishStory !=='') {
+			Story_text = features[i].properties.EditedEnglishStory;
+		} else {
+			Story_text = features[i].properties.StoryEnglish;
 		}
 		if (features[i].properties.Language !=='English') {
 			Translation_note = '<div class="translation_note_box"><p class="link_to_original">(Translated from ' + features[i].properties.Language + '. See the <a href="' + features[i].properties.Link + '" target="_blank">original post in ' + features[i].properties.Language + '</a>.)</p></div>';
@@ -917,11 +949,11 @@ function buildResults(features) {
 			//Translation_string = '';
 		}
 		if (features[i].properties.Image !=='') {
-			var Image_text = '<img class="story_image" src="' + features[i].properties.Image + '" width="100%"><br>';
+			Image_text = '<img class="story_image" src="' + features[i].properties.Image + '" width="100%"><br>';
 		} else {
-			var Image_text = '';
+			Image_text = '';
 		}
-		html_string += '<div class="story_item" style="display: block;"><b>'+ features[i].properties.TitleEnglish + '</b>, ' + features[i].properties.NationalSociety + '<br>' + Image_text + '<p><i>' + features[i].properties.Submitter_firstname + '</i> &mdash; ' + Story_text + Translation_note + '</p></div>';
+		html_string += '<div class="story_item" style="display: block;"><b>'+ Story_title + '</b>, ' + features[i].properties.NationalSociety + '<br>' + Image_text + '<p><i>' + features[i].properties.Submitter_firstname + '</i> &mdash; ' + Story_text + Translation_note + '</p></div>';
 		//document.getElementById('translation_popup').innerHTML = translation_string;
 	}
 	document.getElementById('results').innerHTML = html_string;
