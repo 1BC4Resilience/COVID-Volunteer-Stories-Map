@@ -297,6 +297,8 @@
     }
 
     #credit {
+      position: absolute;
+      bottom: 10px;
       padding-top: 2em;
       font-size: 13px;
       font-family: acumin-pro, sans-serif;
@@ -307,7 +309,7 @@
     .credit_line {
       display: block;
       padding-top: 0.4em;
-      padding-left: 12px;
+      padding-left: 0px;
     }
 
     .translation_note_box {
@@ -457,6 +459,10 @@
       font-size: 12px;
     }
 
+    #credit {
+      font-size: 12px;
+    }
+
     #results, #button_container {
       width: 50vw;
     }
@@ -476,6 +482,46 @@
     }
 
 }
+
+@media screen and (max-width: 580px) {
+
+    #credit {
+      padding-top: 1em;
+      font-size: 11px;
+    }
+
+    #SBTF_credit img {
+      height: 16px;
+    }
+
+    #Mapbox_credit img {
+      height: 14px;
+    }
+
+}
+
+@media screen and (max-width: 536px) {
+
+    #filter_content {
+        margin-top: 20px;
+    }
+
+    #credit {
+      bottom: 6px;
+      padding-top: 0.5em;
+      font-size: 10px;
+    }
+
+    #SBTF_credit img {
+      height: 14px;
+    }
+
+    #Mapbox_credit img {
+      height: 12px;
+    }
+
+}
+
 
 @media screen and (max-width: 500px) {
 
@@ -595,13 +641,13 @@
 
 <div id="credit">
 Developed with assistance from:
-<span class="credit_line"><a href="https://www.standbytaskforce.org" target="_blank"><img src="./images/SBTF_logo.png" height="18"></a> members</span>
-<span class="credit_line"><a href="https://www.mapbox.com" target="_blank"><img src="./images/mapbox-logo-black.png" height="16"></a></span>
+<span id="SBTF_credit" class="credit_line"><a href="https://www.standbytaskforce.org" target="_blank"><img src="./images/SBTF_logo.png" height="18"></a> members</span>
+<span id="Mapbox_credit" class="credit_line"><a href="https://www.mapbox.com" target="_blank"><img src="./images/mapbox-logo-black.png" height="16"></a></span>
 </div>
 
 </div>
 </div>
-<button id="clear_stories_button">Clear stories</button>
+
 </div>
 
 <div id="results"></div>
