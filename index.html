@@ -341,15 +341,19 @@
 
 /* Translation settings */
 
-    #google_translate_element:before {
+    #google_translate_icon:before {
       font-family: 'Material Icons';
       content: "\E927";
-      margin-left: 20px;
+      //margin-left: 20px;
       font-size: 1.4rem;
       color: #5508d3;
       display: block;
       float: right;
-      right-margin: 6px;
+      margin-right: 6px;
+    }
+
+    #google_translate_element {
+      height: 22px;
     }
 
     body {
@@ -414,7 +418,7 @@
       //width: 80%;
     }
 
-    #google_translate_element:before {
+    #google_translate_icon:before {
       font-size: 1.1rem;
     }
 
@@ -450,10 +454,10 @@
     //}
 
     //#google_translate_element:before {
-   //   margin-top: 20px;
+    //  margin-top: 20px;
     //  font-size: 1.2rem;
-   //   float: right;
-   // }
+    //  float: right;
+    //}
 
 }
 
@@ -479,40 +483,6 @@
       margin: 0 28%;
     }
 
-    .goog-te-combo {
-      font-size: 12px !important;
-    }
-
-
-    #google_translate_element {
-      //width: 80%;
-    }
-
-    #google_translate_element:before {
-      font-size: 1.1rem;
-    }
-
-    #checklist h3 {
-      font-size: 13px;
-    }
-
-    #checklist p {
-      font-size: 13px;
-    }
-
-    INPUT[type=checkbox] {
-      width: 13px;
-      height: 13px;
-    }
-
-    label {
-      font-size: 12px;
-    }
-
-    #credit {
-      font-size: 12px;
-    }
-
     #results, #button_container {
       width: 50vw;
     }
@@ -531,23 +501,59 @@
       margin: 0 34%;
     }
 
+    .goog-te-combo {
+      font-size: 10px !important;
+    }
+
+
+    #google_translate_element {
+      width: 80%;
+    }
+
+    #google_translate_icon:before {
+      font-size: 0.9rem;
+    }
+
+    #filter_content {
+      margin-top: 20px;
+    }
+
+    #checklist h3 {
+      font-size: 11px;
+    }
+
+    #checklist p {
+      font-size: 11px;
+    }
+
+    INPUT[type=checkbox] {
+      width: 11px;
+      height: 11px;
+    }
+
+    label {
+      font-size: 10px;
+    }
+
+    #credit {
+      font-size: 10px;
+    }
+
+    #SBTF_credit img {
+      height: 14px;
+    }
+
+    #Mapbox_credit img {
+      height: 12px;
+    }
+
 }
 
 @media screen and (max-width: 580px) {
 
     #credit {
       padding-top: 1em;
-      font-size: 11px;
     }
-
-    #SBTF_credit img {
-      height: 16px;
-    }
-
-    #Mapbox_credit img {
-      height: 14px;
-    }
-
 }
 
 @media screen and (max-width: 536px) {
@@ -559,15 +565,6 @@
     #credit {
       bottom: 6px;
       padding-top: 0.5em;
-      font-size: 10px;
-    }
-
-    #SBTF_credit img {
-      height: 14px;
-    }
-
-    #Mapbox_credit img {
-      height: 12px;
     }
 
 }
@@ -654,6 +651,7 @@
 <div id="filter_section">
 <div>
     <div id="google_translate_element" style="text-align: right;"></div>
+    <div id="google_translate_icon" style="text-align: right;"></div>
     
       <script type="text/javascript">
       function googleTranslateElementInit() {
