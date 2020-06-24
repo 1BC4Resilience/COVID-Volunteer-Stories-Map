@@ -392,18 +392,68 @@
       display: none !important;
     } 
 
-@media screen and (max-width: 910px) {
+@media screen and (max-width: 1024px) {
+
+    #map_container {
+      width: 82%;
+    }
 
     .intro {
+      top: 38px;
+      font-size: 12px;
       width: 40%;
-      margin: 0 25%;
+      margin: 0 28%;
+    }
+
+    .goog-te-combo {
+      font-size: 12px !important;
+    }
+
+
+    #google_translate_element {
+      //width: 80%;
     }
 
     #google_translate_element:before {
-      margin-top: 20px;
-      font-size: 1.2rem;
-      float: right;
+      font-size: 1.1rem;
     }
+
+    #checklist h3 {
+      font-size: 13px;
+    }
+
+    #checklist p {
+      font-size: 13px;
+    }
+
+    INPUT[type=checkbox] {
+      width: 13px;
+      height: 13px;
+    }
+
+    label {
+      font-size: 12px;
+    }
+
+    #credit {
+      font-size: 12px;
+    }
+
+}
+
+
+@media screen and (max-width: 910px) {
+
+    //.intro {
+    //  width: 40%;
+    //  margin: 0 25%;
+    //}
+
+    //#google_translate_element:before {
+   //   margin-top: 20px;
+    //  font-size: 1.2rem;
+   //   float: right;
+   // }
 
 }
 
@@ -705,7 +755,7 @@ var autoReloadLimit = 2;
 $(document).ready(function() {
     $.ajax({
         type: "GET",
-        url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZrfy0aAVCUxbI37nwAI10oVZcxdm06XpU2i-Mcnc_NjDRouUO2cR5VsAUnNmE6lWabDVcovuHkJy7/pub?gid=393242394&single=true&output=csv',
+        url: 'https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/e/2PACX-1vRZrfy0aAVCUxbI37nwAI10oVZcxdm06XpU2i-Mcnc_NjDRouUO2cR5VsAUnNmE6lWabDVcovuHkJy7/pub?gid=393242394&single=true&output=csv',
         dataType: "text",
         success: function(csvData) {makeGeoJSON(csvData);}
      });
