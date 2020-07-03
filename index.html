@@ -19,7 +19,8 @@
       background: #ffffff;
       margin: 0;
       padding: 0;
-      height: 100%;
+      height: calc(100% - 172px);
+      width: 100%;
     }
 
     #map_block {
@@ -576,14 +577,12 @@
 
     #SBTF_credit img {
       height: 14px;
-      //width: 50px;
-      //display: inline;
       float: left;
+      padding-top: 2px;
     }
 
     #Mapbox_credit img {
       height: 12px;
-      //display: inline;
       margin-left: 6px;
     }
 
@@ -835,10 +834,9 @@ map.on('error', e => {
         if (e.toString().substr(0,19) || e.error.toString().substr(0,19) === 'Input data given to') {
             console.log('Error loading data. Retrying ...');
             setTimeout(function(){
-
      	       buildLayers(data_geoJSON, clusterFilter, individualFilter);
 
-            }, 2000); 
+            }, 4500); 
         }
     }
 });
