@@ -520,7 +520,7 @@
     }
 
     #filter_content {
-      margin-top: 8px;
+      margin-top: 4px;
       margin-left: 8px;
     }
 
@@ -546,6 +546,10 @@
       height: 11px;
     }
 
+    INPUT[type=checkbox]:checked {
+      background: #5508d3  url("data:image/gif;base64,R0lGODlhCwAKAIABAP////3cnSH5BAEKAAEALAAAAAALAAoAAAIUjH+AC73WHIsw0UCjglraO20PNhYAOw==") 0px 0px no-repeat;
+    }
+
     label {
       font-size: 10px;
       height: 17px;
@@ -557,18 +561,25 @@
 
     #credit {
       font-size: 10px;
+      width: 100%; 
+      overflow: hidden;
     }
 
-    #full-credit-text {
+    .full-credit-text {
       display: none;
     }
 
     #SBTF_credit img {
-      height: 14px;
+      height: 13px;
+      //width: 50px;
+      //display: inline;
+      float: left;
     }
 
     #Mapbox_credit img {
-      height: 12px;
+      height: 11px;
+      //display: inline;
+      margin-left: 10px;
     }
 
 }
@@ -712,8 +723,8 @@
 </form>
 
 <div id="credit">
-Developed with <span id="full-credit-text">assistance from</span>:
-<span id="SBTF_credit" class="credit_line"><a href="https://www.standbytaskforce.org" target="_blank"><img src="./images/SBTF_logo.png" height="18"></a> members</span>
+<span class="full-credit-text">Developed with assistance from:</span>
+<span id="SBTF_credit" class="credit_line"><a href="https://www.standbytaskforce.org" target="_blank"><img src="./images/SBTF_logo.png" height="18"></a><span class="full-credit-text"> members</span></span>
 <span id="Mapbox_credit" class="credit_line"><a href="https://www.mapbox.com" target="_blank"><img src="./images/mapbox-logo-black.png" height="16"></a></span>
 </div>
 
