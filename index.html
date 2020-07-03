@@ -19,8 +19,7 @@
       background: #ffffff;
       margin: 0;
       padding: 0;
-      height: calc(100% - 172px);
-      width: 100%;
+      height: 100%;
     }
 
     #map_block {
@@ -792,7 +791,7 @@ var autoReloadLimit = 2;
 $(document).ready(function() {
     $.ajax({
         type: "GET",
-        url: 'https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/e/2PACX-1vRZrfy0aAVCUxbI37nwAI10oVZcxdm06XpU2i-Mcnc_NjDRouUO2cR5VsAUnNmE6lWabDVcovuHkJy7/pub?gid=393242394&single=true&output=csv',
+        url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZrfy0aAVCUxbI37nwAI10oVZcxdm06XpU2i-Mcnc_NjDRouUO2cR5VsAUnNmE6lWabDVcovuHkJy7/pub?gid=393242394&single=true&output=csv',
         dataType: "text",
         success: function(csvData) {makeGeoJSON(csvData);}
      });
