@@ -533,6 +533,10 @@
       margin-block-end: 0px !important;
     }
 
+   #category-label {
+      margin-block-start: 9px !important;
+    }
+
     #checklist h3 {
       font-size: 11px;
     }
@@ -701,7 +705,7 @@
 <form action="javascript:;" onsubmit="runFilter()">
   <div id="checklist">
   <h3 id="filter-options-label">Filter options</h3>
-  <p class="filter-label">Category</p>
+  <p class="filter-label" id="category-label">Category</p>
   <label><input type="checkbox" id="checkOutreach" class="catCheck" name="catSelect" value="vulnerable populations" onclick="runFilter()">Vulnerable groups</label>
   <label><input type="checkbox" id="checkPSS" class="catCheck" name="catSelect" value="Psycho-social" onclick="runFilter()">Psycho-social</label>
   <label><input type="checkbox" id="checkCommunciations" class="catCheck" name="catSelect" value="communication" onclick="runFilter()">Communications</label>
