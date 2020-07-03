@@ -159,6 +159,7 @@
     }
 
     label {
+      display: block;
       color: #5508d3;
       font-size: 15px;
       font-family: acumin-pro, sans-serif;
@@ -185,7 +186,7 @@
 
     INPUT[type=checkbox]:checked {
       background-color: #5508d3; 
-      background: #5508d3  url("data:image/gif;base64,R0lGODlhCwAKAIABAP////3cnSH5BAEKAAEALAAAAAALAAoAAAIUjH+AC73WHIsw0UCjglraO20PNhYAOw==") 3px 3px no-repeat;
+      background: #5508d3  url("data:image/gif;base64,R0lGODlhCwAKAIABAP////3cnSH5BAEKAAEALAAAAAALAAoAAAIUjH+AC73WHIsw0UCjglraO20PNhYAOw==") 1px 1px no-repeat;
     }
 
     #results {
@@ -516,6 +517,7 @@
 
     #filter_content {
       margin-top: 20px;
+      margin-left: 8px;
     }
 
     #checklist h3 {
@@ -533,6 +535,10 @@
 
     label {
       font-size: 10px;
+    }
+
+    #hygieneLabel {
+      display: none;
     }
 
     #credit {
@@ -666,20 +672,20 @@
   <div id="checklist">
   <h3>Filter options</h3>
   <p class="filter-label">Category</p>
-  <label><input type="checkbox" id="checkOutreach" class="catCheck" name="catSelect" value="vulnerable populations" onclick="runFilter()">Vulnerable populations</label><br>
-  <label><input type="checkbox" id="checkPSS" class="catCheck" name="catSelect" value="Psycho-social" onclick="runFilter()">Psycho-social</label><br>
-  <label><input type="checkbox" id="checkCommunciations" class="catCheck" name="catSelect" value="communication" onclick="runFilter()">Communications</label><br>
-  <label><input type="checkbox" id="checkFoodAssistance" class="catCheck" name="catSelect" value="Food assistance" onclick="runFilter()">Food assistance</label><br>
-  <label><input type="checkbox" id="checkHealth" class="catCheck" name="catSelect" value="Health" onclick="runFilter()">Health</label><br>
-  <label><input type="checkbox" id="checkHygiene" class="catCheck" name="catSelect" value="Hygiene" onclick="runFilter()">Hygiene</label><br>
+  <label><input type="checkbox" id="checkOutreach" class="catCheck" name="catSelect" value="vulnerable populations" onclick="runFilter()">Vulnerable groups</label>
+  <label><input type="checkbox" id="checkPSS" class="catCheck" name="catSelect" value="Psycho-social" onclick="runFilter()">Psycho-social</label>
+  <label><input type="checkbox" id="checkCommunciations" class="catCheck" name="catSelect" value="communication" onclick="runFilter()">Communications</label>
+  <label><input type="checkbox" id="checkFoodAssistance" class="catCheck" name="catSelect" value="Food assistance" onclick="runFilter()">Food assistance</label>
+  <label><input type="checkbox" id="checkHealth" class="catCheck" name="catSelect" value="Health" onclick="runFilter()">Health</label>
+  <label id="hygieneLabel"><input type="checkbox" id="checkHygiene" class="catCheck" name="catSelect" value="Hygiene" onclick="runFilter()">Hygiene</label>
   <p class="filter-label">Sentiment</p>
-  <label><input type="checkbox" id="checkIndivHeroism" class="sentCheck" name="catSelect" value="Individual - Everyday heroism and volunteers sacrifices" onclick="runFilter()">Individual - Heroism</label><br>
-  <label><input type="checkbox" id="checkIndivVulnerability" class="sentCheck" name="catSelect" value="Individual - Volunteers fragility, needs and vulnerabilities" onclick="runFilter()">Individual - Vulnerability</label><br>
-  <label><input type="checkbox" id="checkIndivCoping" class="sentCheck" name="catSelect" value="Individual - Volunteering as coping mechanism" onclick="runFilter()">Individual - Coping</label><br>
-  <label><input type="checkbox" id="checkCommOpportunity" class="sentCheck" name="catSelect" value="Community - Crisis as opportunity" onclick="runFilter()">Community - Opportunity</label><br>
-  <label><input type="checkbox" id="checkCommRisks" class="sentCheck" name="catSelect" value="Community - Existing and increased risks" onclick="runFilter()">Community - Risks</label><br>
-  <label><input type="checkbox" id="checkIntlBelonging" class="sentCheck" name="catSelect" value="International - Reinforced belonging and common purpose" onclick="runFilter()">Global - Belonging</label><br>
-  <label><input type="checkbox" id="checkIntlResponsibility" class="sentCheck" name="catSelect" value="International - Increased responsibility" onclick="runFilter()">Global - Responsibility</label><br>
+  <label><input type="checkbox" id="checkIndivHeroism" class="sentCheck" name="catSelect" value="Individual - Everyday heroism and volunteers sacrifices" onclick="runFilter()">Heroism</label>
+  <label><input type="checkbox" id="checkIndivVulnerability" class="sentCheck" name="catSelect" value="Individual - Volunteers fragility, needs and vulnerabilities" onclick="runFilter()">Vulnerability</label>
+  <label><input type="checkbox" id="checkIndivCoping" class="sentCheck" name="catSelect" value="Individual - Volunteering as coping mechanism" onclick="runFilter()">Coping</label>
+  <label><input type="checkbox" id="checkCommOpportunity" class="sentCheck" name="catSelect" value="Community - Crisis as opportunity" onclick="runFilter()">Opportunity</label>
+  <label><input type="checkbox" id="checkCommRisks" class="sentCheck" name="catSelect" value="Community - Existing and increased risks" onclick="runFilter()">Risks</label>
+  <label><input type="checkbox" id="checkIntlBelonging" class="sentCheck" name="catSelect" value="International - Reinforced belonging and common purpose" onclick="runFilter()">Belonging</label>
+  <label><input type="checkbox" id="checkIntlResponsibility" class="sentCheck" name="catSelect" value="International - Increased responsibility" onclick="runFilter()">Responsibility</label>
   </div>
 <!--
   <hr>
