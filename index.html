@@ -805,6 +805,7 @@ $(document).ready(function() {
         type: "GET",
         url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZrfy0aAVCUxbI37nwAI10oVZcxdm06XpU2i-Mcnc_NjDRouUO2cR5VsAUnNmE6lWabDVcovuHkJy7/pub?gid=393242394&single=true&output=csv',
         dataType: "text",
+        
         success: function(csvData) {makeGeoJSON(csvData);}
      });
 });
@@ -841,6 +842,8 @@ map.on('load', function () {
 map.on('error', e => {
     // Reload on data load error.
     autoReloadNumber += 1;
+
+/*
     if (autoReloadNumber < autoReloadLimit) {
         if (e.toString().substr(0,19) || e.error.toString().substr(0,19) === 'Input data given to') {
             console.log('Error loading data. Retrying ...');
@@ -850,6 +853,8 @@ map.on('error', e => {
             }, 4500); 
         }
     }
+*/
+
 });
 
 
