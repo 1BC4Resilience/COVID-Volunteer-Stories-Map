@@ -322,6 +322,10 @@
       padding-left: 0px;
     }
 
+    #condensed-credit-text {
+      display: none;
+    }
+
     .translation_note_box {
       margin-top: 4px;
       display: block;
@@ -550,7 +554,7 @@
     }
 
    #category-label {
-      margin-block-start: 9px !important;
+      margin-block-start: 8px !important;
     }
 
     #checklist h3 {
@@ -572,7 +576,7 @@
 
     label {
       font-size: 10px;
-      height: 17px;
+      height: 16px;
     }
 
     #hygieneLabel {
@@ -590,19 +594,38 @@
       display: none;
     }
 
+    #condensed-credit-text {
+      display: inline;
+      font-size: 10px;
+      float: left;
+    }
+
+    #SBTF_credit {
+       padding-top: 0px;
+    }
+
     #SBTF_credit img {
       height: 14px;
-      float: left;
-      padding-top: 2px;
+      //float: left;
+      //padding-top: 0px;
+      margin-left: 3px;
+    }
+
+    #Mapbox_credit {
+       padding-top: 0px;
     }
 
     #Mapbox_credit img {
       height: 12px;
-      margin-left: 6px;
+      margin-left: -1px;
+      margin-right: 6px;
+      float: left;
     }
 
     #Rob_Baker_credit {
-      display: none;
+      padding-top: 0px;
+      font-size: 10px;
+
     }
 
 }
@@ -747,9 +770,10 @@
 
 <div id="credit">
 <span class="full-credit-text">Developed with assistance from:</span>
+<span id="condensed-credit-text">Assistance:</span>
 <span id="SBTF_credit" class="credit_line"><a href="https://www.standbytaskforce.org" target="_blank"><img src="./images/SBTF_logo.png" height="18"></a><span class="full-credit-text"> members</span></span>
 <span id="Mapbox_credit" class="credit_line"><a href="https://www.mapbox.com" target="_blank"><img src="./images/mapbox-logo-black.png" height="16"></a></span>
-<div id="Rob_Baker_credit" class="full-credit-text">Rob Baker</div>
+<div id="Rob_Baker_credit">Rob Baker</div>
 </div>
 
 </div>
