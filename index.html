@@ -803,7 +803,7 @@ var autoReloadLimit = 2;
 $(document).ready(function() {
     $.ajax({
         type: "GET",
-        url: 'https://spreadsheets.google.com/tq?key=%201LplOP5FsMIcqvZ3d0w8yM108IgJxB0UQiV3fv38sKjc&tqx=out:csv',
+        url: 'https://spreadsheets.google.com/tq?key=1LplOP5FsMIcqvZ3d0w8yM108IgJxB0UQiV3fv38sKjc&tqx=out:csv',
         dataType: "text",
         
         success: function(csvData) {makeGeoJSON(csvData);}
