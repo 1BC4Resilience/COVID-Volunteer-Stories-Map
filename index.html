@@ -803,7 +803,7 @@ var autoReloadLimit = 2;
 $(document).ready(function() {
     $.ajax({
         type: "GET",
-        url: 'https://spreadsheets.google.com/tq?key=1LplOP5FsMIcqvZ3d0w8yM108IgJxB0UQiV3fv38sKjc&tqx=out:csv',
+        url: 'http://www.whateverorigin.org/get?url=https://docs.google.com/spreadsheets/d/e/2PACX-1vRZrfy0aAVCUxbI37nwAI10oVZcxdm06XpU2i-Mcnc_NjDRouUO2cR5VsAUnNmE6lWabDVcovuHkJy7/pub?gid=393242394&single=true&output=csv',
         dataType: "text",
         
         success: function(csvData) {makeGeoJSON(csvData);}
